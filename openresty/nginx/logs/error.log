@@ -1,0 +1,129 @@
+2016/01/07 11:31:41 [notice] 3596#0: signal process started
+2016/01/07 11:31:41 [alert] 3596#0: kill(3511, 1) failed (3: No such process)
+2016/01/07 11:31:46 [notice] 3599#0: signal process started
+2016/01/07 11:31:46 [alert] 3599#0: kill(3511, 1) failed (3: No such process)
+2016/01/07 11:34:24 [notice] 3616#0: signal process started
+2016/01/07 11:36:40 [notice] 3644#0: signal process started
+2016/01/07 11:36:40 [error] 3644#0: open() "/usr/local/openresty/nginx/logs/nginx.pid" failed (2: No such file or directory)
+2016/01/07 11:37:38 [notice] 3652#0: signal process started
+2016/01/07 11:37:38 [error] 3652#0: invalid PID number "" in "/usr/local/openresty/nginx/logs/nginx.pid"
+2016/01/07 11:37:45 [notice] 3654#0: signal process started
+2016/01/07 11:37:45 [error] 3654#0: invalid PID number "" in "/usr/local/openresty/nginx/logs/nginx.pid"
+2016/01/07 11:39:41 [notice] 3667#0: signal process started
+2016/01/07 11:39:41 [error] 3667#0: invalid PID number "" in "/usr/local/openresty/nginx/logs/nginx.pid"
+2016/01/07 11:45:38 [emerg] 3695#0: bind() to 0.0.0.0:6699 failed (98: Address already in use)
+2016/01/07 11:45:38 [emerg] 3695#0: bind() to 0.0.0.0:6699 failed (98: Address already in use)
+2016/01/07 11:45:38 [emerg] 3695#0: bind() to 0.0.0.0:6699 failed (98: Address already in use)
+2016/01/07 11:45:38 [emerg] 3695#0: bind() to 0.0.0.0:6699 failed (98: Address already in use)
+2016/01/07 11:45:38 [emerg] 3695#0: bind() to 0.0.0.0:6699 failed (98: Address already in use)
+2016/01/07 11:45:38 [emerg] 3695#0: still could not bind()
+2016/01/07 11:46:25 [notice] 3697#0: signal process started
+2016/01/07 11:46:25 [error] 3697#0: invalid PID number "" in "/usr/local/openresty/nginx/logs/nginx.pid"
+2016/01/07 11:47:18 [notice] 3703#0: signal process started
+2016/01/07 11:47:56 [notice] 3710#0: signal process started
+2016/01/07 16:38:40 [notice] 4523#0: signal process started
+2016/01/07 16:50:41 [notice] 4584#0: signal process started
+2016/01/07 16:50:41 [alert] 4584#0: kill(3662, 1) failed (3: No such process)
+2016/01/07 16:52:51 [notice] 4630#0: signal process started
+2016/01/07 16:52:51 [error] 4630#0: open() "/usr/local/openresty/nginx/logs/nginx.pid" failed (2: No such file or directory)
+2016/01/07 16:54:09 [notice] 4645#0: signal process started
+2016/01/07 17:08:59 [notice] 4696#0: signal process started
+2016/01/07 17:10:28 [notice] 4705#0: signal process started
+2016/01/07 17:20:14 [notice] 4746#0: signal process started
+2016/01/07 17:21:03 [notice] 4753#0: signal process started
+2016/01/07 17:21:03 [alert] 4753#0: kill(4555, 1) failed (3: No such process)
+2016/01/11 11:15:15 [notice] 7304#0: signal process started
+2016/01/11 11:15:15 [alert] 7304#0: kill(4555, 1) failed (3: No such process)
+2016/01/11 11:16:33 [notice] 7317#0: signal process started
+2016/01/11 12:09:47 [notice] 7484#0: signal process started
+2016/01/11 12:10:55 [notice] 7491#0: signal process started
+2016/01/11 14:19:39 [notice] 7758#0: signal process started
+2016/01/11 14:24:53 [notice] 7784#0: signal process started
+2016/01/12 17:13:39 [notice] 11949#0: signal process started
+2016/01/12 17:16:07 [notice] 11956#0: signal process started
+2016/01/12 17:24:40 [notice] 12015#0: signal process started
+2016/01/12 17:24:40 [alert] 12015#0: kill(11958, 1) failed (3: No such process)
+2016/01/12 17:25:39 [notice] 12026#0: signal process started
+2016/01/12 17:28:23 [notice] 12039#0: signal process started
+2016/01/12 17:32:22 [notice] 12056#0: signal process started
+2016/01/12 17:36:30 [notice] 12074#0: signal process started
+2016/01/12 17:41:34 [notice] 12101#0: signal process started
+2016/01/12 17:45:18 [notice] 12124#0: signal process started
+2016/01/12 17:48:44 [notice] 12137#0: signal process started
+2016/01/12 18:10:46 [notice] 12200#0: signal process started
+2016/01/12 18:53:38 [notice] 12329#0: signal process started
+2016/01/12 19:02:07 [notice] 12363#0: signal process started
+2016/01/12 19:02:41 [notice] 12366#0: signal process started
+2016/01/12 19:03:04 [notice] 12369#0: signal process started
+2016/01/12 19:03:50 [notice] 12374#0: signal process started
+2016/01/12 19:07:18 [notice] 12385#0: signal process started
+2016/01/12 19:09:49 [notice] 12395#0: signal process started
+2016/01/12 19:13:35 [notice] 12416#0: signal process started
+2016/01/12 19:14:08 [notice] 12419#0: signal process started
+2016/01/13 10:50:33 [notice] 17373#0: signal process started
+2016/01/13 10:50:35 [notice] 17375#0: signal process started
+2016/01/13 11:50:54 [notice] 17552#0: signal process started
+2016/01/13 14:46:02 [notice] 17967#0: signal process started
+2016/01/13 14:47:49 [notice] 17972#0: signal process started
+2016/01/13 14:48:37 [notice] 17977#0: signal process started
+2016/01/13 15:06:16 [notice] 18089#0: signal process started
+2016/01/13 15:06:16 [alert] 18089#0: kill(12003, 1) failed (3: No such process)
+2016/01/13 15:07:13 [notice] 18097#0: signal process started
+2016/01/13 15:19:08 [alert] 18125#0: worker process 18126 exited on signal 9
+2016/01/13 17:15:58 [notice] 18550#0: signal process started
+2016/01/13 17:15:58 [alert] 18550#0: kill(18125, 1) failed (3: No such process)
+2016/01/13 17:16:55 [notice] 18559#0: signal process started
+2016/01/13 17:20:00 [notice] 18569#0: signal process started
+2016/01/13 17:29:49 [notice] 18602#0: signal process started
+2016/01/13 17:47:35 [notice] 18649#0: signal process started
+2016/01/13 17:49:22 [notice] 18659#0: signal process started
+2016/01/13 17:52:26 [notice] 18673#0: signal process started
+2016/01/13 17:54:13 [notice] 18681#0: signal process started
+2016/01/13 17:55:35 [notice] 18686#0: signal process started
+2016/01/13 18:00:16 [notice] 18700#0: signal process started
+2016/01/13 18:16:57 [notice] 18744#0: signal process started
+2016/01/13 18:23:37 [notice] 18767#0: signal process started
+2016/01/13 18:30:53 [notice] 18788#0: signal process started
+2016/01/13 18:31:54 [notice] 18793#0: signal process started
+2016/01/13 18:42:38 [notice] 18823#0: signal process started
+2016/01/13 18:44:34 [notice] 18831#0: signal process started
+2016/01/13 19:15:19 [notice] 18925#0: signal process started
+2016/01/13 19:16:42 [notice] 18937#0: signal process started
+2016/01/13 19:23:34 [notice] 18957#0: signal process started
+2016/01/13 19:24:08 [notice] 18960#0: signal process started
+2016/01/14 10:51:05 [notice] 22429#0: signal process started
+2016/01/14 10:51:24 [error] 18133#0: *1 open() "/usr/local/openresty/nginx/html/lua_template_3" failed (2: No such file or directory), client: 192.168.132.59, server: localhost, request: "GET /lua_template_3 HTTP/1.1", host: "10.255.223.153"
+2016/01/14 10:51:24 [error] 18133#0: *1 open() "/usr/local/openresty/nginx/html/favicon.ico" failed (2: No such file or directory), client: 192.168.132.59, server: localhost, request: "GET /favicon.ico HTTP/1.1", host: "10.255.223.153"
+2016/01/14 10:51:26 [error] 18133#0: *1 open() "/usr/local/openresty/nginx/html/lua_template_3" failed (2: No such file or directory), client: 192.168.132.59, server: localhost, request: "GET /lua_template_3 HTTP/1.1", host: "10.255.223.153"
+2016/01/14 10:51:28 [error] 18133#0: *1 open() "/usr/local/openresty/nginx/html/lua_template_3" failed (2: No such file or directory), client: 192.168.132.59, server: localhost, request: "GET /lua_template_3 HTTP/1.1", host: "10.255.223.153"
+2016/01/14 10:51:43 [notice] 22433#0: signal process started
+2016/01/14 10:53:05 [notice] 22445#0: signal process started
+2016/01/14 10:53:17 [error] 18133#0: *3 open() "/usr/local/openresty/nginx/html/lua_template_3" failed (2: No such file or directory), client: 192.168.132.59, server: localhost, request: "GET /lua_template_3 HTTP/1.1", host: "10.255.223.153"
+2016/01/14 10:53:17 [error] 18133#0: *3 open() "/usr/local/openresty/nginx/html/favicon.ico" failed (2: No such file or directory), client: 192.168.132.59, server: localhost, request: "GET /favicon.ico HTTP/1.1", host: "10.255.223.153"
+2016/01/14 10:53:17 [error] 18133#0: *3 open() "/usr/local/openresty/nginx/html/lua_template_3" failed (2: No such file or directory), client: 192.168.132.59, server: localhost, request: "GET /lua_template_3 HTTP/1.1", host: "10.255.223.153"
+2016/01/14 10:53:17 [error] 18133#0: *3 open() "/usr/local/openresty/nginx/html/favicon.ico" failed (2: No such file or directory), client: 192.168.132.59, server: localhost, request: "GET /favicon.ico HTTP/1.1", host: "10.255.223.153"
+2016/01/14 10:53:18 [error] 18133#0: *3 open() "/usr/local/openresty/nginx/html/lua_template_3" failed (2: No such file or directory), client: 192.168.132.59, server: localhost, request: "GET /lua_template_3 HTTP/1.1", host: "10.255.223.153"
+2016/01/14 10:53:18 [error] 18133#0: *3 open() "/usr/local/openresty/nginx/html/favicon.ico" failed (2: No such file or directory), client: 192.168.132.59, server: localhost, request: "GET /favicon.ico HTTP/1.1", host: "10.255.223.153"
+2016/01/14 10:53:18 [error] 18133#0: *3 open() "/usr/local/openresty/nginx/html/lua_template_3" failed (2: No such file or directory), client: 192.168.132.59, server: localhost, request: "GET /lua_template_3 HTTP/1.1", host: "10.255.223.153"
+2016/01/14 10:53:18 [error] 18133#0: *3 open() "/usr/local/openresty/nginx/html/favicon.ico" failed (2: No such file or directory), client: 192.168.132.59, server: localhost, request: "GET /favicon.ico HTTP/1.1", host: "10.255.223.153"
+2016/01/14 10:53:18 [error] 18133#0: *3 open() "/usr/local/openresty/nginx/html/lua_template_3" failed (2: No such file or directory), client: 192.168.132.59, server: localhost, request: "GET /lua_template_3 HTTP/1.1", host: "10.255.223.153"
+2016/01/14 10:53:19 [error] 18133#0: *3 open() "/usr/local/openresty/nginx/html/favicon.ico" failed (2: No such file or directory), client: 192.168.132.59, server: localhost, request: "GET /favicon.ico HTTP/1.1", host: "10.255.223.153"
+2016/01/14 10:53:19 [error] 18133#0: *3 open() "/usr/local/openresty/nginx/html/lua_template_3" failed (2: No such file or directory), client: 192.168.132.59, server: localhost, request: "GET /lua_template_3 HTTP/1.1", host: "10.255.223.153"
+2016/01/14 10:53:19 [error] 18133#0: *3 open() "/usr/local/openresty/nginx/html/favicon.ico" failed (2: No such file or directory), client: 192.168.132.59, server: localhost, request: "GET /favicon.ico HTTP/1.1", host: "10.255.223.153"
+2016/01/14 11:46:27 [notice] 22591#0: signal process started
+2016/01/14 11:46:27 [alert] 22591#0: kill(18046, 1) failed (3: No such process)
+2016/01/14 11:47:26 [notice] 22601#0: signal process started
+2016/01/14 11:53:23 [notice] 22626#0: signal process started
+2016/01/14 11:53:41 [notice] 22632#0: signal process started
+2016/01/14 11:56:06 [notice] 22647#0: signal process started
+2016/01/14 16:50:28 [notice] 23311#0: signal process started
+2016/01/14 17:13:22 [notice] 23390#0: signal process started
+2016/01/14 17:15:03 [notice] 23400#0: signal process started
+2016/01/14 17:50:59 [notice] 23494#0: signal process started
+2016/01/14 18:08:08 [notice] 23542#0: signal process started
+2016/01/14 18:12:21 [notice] 23556#0: signal process started
+2016/01/14 19:27:22 [notice] 23745#0: signal process started
+2016/01/14 19:28:21 [notice] 23753#0: signal process started
+2016/01/14 19:28:47 [notice] 23759#0: signal process started
+2016/01/15 10:19:18 [notice] 25994#0: signal process started
+2016/01/15 10:20:42 [notice] 26004#0: signal process started
