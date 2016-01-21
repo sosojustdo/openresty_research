@@ -1,4 +1,4 @@
-Ò»£ºInstall
+ï»¿ä¸€ï¼šInstall
 1:wget https://openresty.org/download/ngx_openresty-1.9.7.1.tar.gz
 2:
 ./configure --prefix=/usr/local/openresty \
@@ -15,7 +15,7 @@ source /etc/profile
 
 
 
-¶þ: Make Workbench
+äºŒ: Make Workbench
 mkdir /usr/local/openresty-test
 mkdir conf/ logs/
 
@@ -30,7 +30,7 @@ nginx -p /usr/local/openresty-test/ -c /usr/local/openresty-test/conf/nginx.conf
 
 
 
-Èý£ºReference Material
+ä¸‰ï¼šReference Material
 http://openresty.org/
 http://jinnianshilongnian.iteye.com/blog/2190344
 https://github.com/openresty/lua-nginx-module
