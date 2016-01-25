@@ -2,11 +2,12 @@ local ngx_log = ngx.log
 local ngx_ERR = ngx.ERR
 local ngx_INFO = ngx.INFO
 local common_tab = {}
-local http_uri = "http://k.dangdang.com"
+local http_uri = "http://10.4.36.37"
+local http = require("resty.http")
+local ck = require("resty.cookie")
 
 
 local function read_http(args)
-	local http = require("resty.http")
 	--创建http客户端实例
 	local httpc = http.new()
 
@@ -35,6 +36,7 @@ local function read_http(args)
 		end
 	end
 	--响应体
+	common_tab["http_body"] = resp.body
 	ngx.say(resp.body)
 
 	httpc:close()
@@ -111,7 +113,6 @@ end
 
 -- get Token
 local function getToken()
-	local ck = require "resty.cookie"
 	local cookie, err = ck:new()
 	if not cookie then
 		ngx_log(ngx_ERR, "cookie object instance is empty, err:"..err)
