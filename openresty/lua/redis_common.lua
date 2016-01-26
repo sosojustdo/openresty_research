@@ -21,8 +21,10 @@ local function get_w_redis()
 
 	local ok, err = w_red:connect(w_ip, w_port)
 	if not ok then
-		ngx.say("connect to write redis error : ", err)
-		return close_redis(w_red)
+		ngx_log(ngx_ERR, "connect to write redis error:"..err)
+		if w_red ~= nil then
+			return close_redis(w_red)
+		end
 	end
 
 	return w_red
@@ -36,8 +38,10 @@ local function get_r_redis()
 
 	local ok, err = r_red:connect(r_ip, r_port)
 	if not ok then
-		ngx.say("connect to read redis error : ", err)
-		return close_redis(r_red)
+		ngx_log(ngx_ERR, "connect to read redis error"..err)
+		if r_red ~= nil then
+			return close_redis(r_red)
+		end
 	end
 
 	return r_red
@@ -48,9 +52,13 @@ local function close_redis(red)
     if not red then
         return
     end
+	if red == nil then
+		return
+	end
     local ok, err = red:close()
     if not ok then
-        ngx.say("close redis error:", err)
+		ngx_log(ngx_ERR, "close redis error:"..err)
+        return
     end
 end
 
@@ -59,8 +67,10 @@ end
 local function expire_redis(red, key)
 	local ok, err = red:expire(key, default_expire_time)
 	if not ok then
-		ngx.say("redis expire error:", err)
-		close_redis(red)
+		ngx_log(ngx_ERR, "redis expire error:"..err)
+		if red ~= nil then
+			return close_redis(red)
+		end
 	end
 end
 
@@ -69,8 +79,10 @@ end
 local function hset_redis(red, key, filed, value)
 	local ok, err = red:hset(key, filed, value)
 	if not ok then
-		ngx.say("redis hset error:", err)
-		close_redis(red)
+		ngx_log(ngx_ERR, "redis hset error:"..err)
+		if red ~= nil then
+			return close_redis(red)
+		end
 	end
 end
 
@@ -79,8 +91,10 @@ end
 local function hget_redis(red, key, filed)
 	local resp, err = red:hget(key, filed)
 	if not resp then
-		ngx.say("redis hget error:", err)
-		return close_reedis(red)
+		ngx_log(ngx_ERR, "redis hget error:"..err)
+		if red ~= nil then
+			return close_redis(red)
+		end
 	end
 
 	if resp == ngx.null then
@@ -98,8 +112,10 @@ end
 local function set_redis(red, key, value)
 	local ok, err = red:set(key, value)
 	if not ok then
-		ngx.say("set redis error:", err)
-		return close_redis(red)
+		ngx_log(ngx_ERR, "set redis error:"..err)
+		if red ~= nil then
+			return close_redis(red)
+		end
 	end
 end
 
@@ -108,8 +124,10 @@ end
 local function get_redis(red, key)
 	local resp, err = red:get(key)
 	if not resp then
-		ngx.say("redis get error:", err)
-		return close_reedis(red)
+		ngx_log(ngx_ERR, "redis get error:"..err)
+		if red ~= nil then
+			return close_redis(red)
+		end
 	end
 
 	if resp == ngx.null then

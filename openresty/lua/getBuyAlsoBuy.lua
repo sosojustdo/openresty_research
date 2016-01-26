@@ -1,7 +1,9 @@
 local common = require "common"
 local redis = require "redis_common"
+local json = require "json_common"
 
 local ngx_log = ngx.log
+local ngx_ERR = ngx.ERR
 local ngx_INFO = ngx.INFO
 
 
@@ -20,10 +22,18 @@ if getBuyAlsoBuy_value == '' then
 	getBuyAlsoBuy_value = common_tab["http_body"]
 
 	if getBuyAlsoBuy_value ~= nil or getBuyAlsoBuy_value ~= ngx.null then
-		local w_red = redis.get_w_redis()
-		redis.set_redis(w_red, key, getBuyAlsoBuy_value)
-		redis.expire_redis(w_red, key)
-		redis.close_redis(w_red)
+		local getBuyAlsoBuy_obj = json.decode(getBuyAlsoBuy_value)
+		local http_status = getBuyAlsoBuy_obj.status.code
+
+		if http_status == 0 then
+			local w_red = redis.get_w_redis()
+			redis.set_redis(w_red, key, getBuyAlsoBuy_value)
+			redis.expire_redis(w_red, key)
+			redis.close_redis(w_red)
+		else
+			local error_message = getBuyAlsoBuy_obj.status.message
+			ngx_log(ngx_ERR, "getBuyAlsoBuy interface http code:"..http_status.." message:"..error_message)
+		end
 	end
 else
 	redis.close_redis(r_red)
