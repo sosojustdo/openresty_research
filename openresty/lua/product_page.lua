@@ -1,4 +1,8 @@
 local common = require "common"
+local json = require "json_common"
+local template = require "resty.template"
+--关闭模板缓存
+template.caching(false)
 
 local args = ngx.req.get_uri_args()
 
@@ -134,36 +138,118 @@ local res1, res2, res3, res4, res5, res6 = ngx.location.capture_multi{
 	{ "/queryArticleListV2", {args = queryArticleListV2Table} },
  }
 
+local model_tab = {}
+
 ngx.say("</br>".."-------------------------------------------- getMedia: ----------------------------------------------------".."</br>")
 if res1.status == ngx.HTTP_OK then
 	ngx.say(res1.body)
+
+	local media_obj = json.decode(res1.body)
+
+	local http_status = media_obj.status.code
+
+	if http_status ~= 0 then
+		local error_message = media_obj.status.message
+		ngx_log(ngx_ERR, "getMedia interface http code:"..http_status.." message:"..error_message)
+		media_obj = nil
+	end
+	model_tab["media_model"] = media_obj
+else
+	ngx_log(ngx_ERR, "getMedia http response unnormal status is:"..res1.status)
 end
 
 ngx.say("</br>".."-------------------------------------------- getMediaCategorySaleTopn: ----------------------------------------------------".."</br>")
 if res2.status == ngx.HTTP_OK then
 	ngx.say(res2.body)
+
+	local media_category_sale_top_obj = json.decode(res2.body)
+
+	local http_status = media_category_sale_top_obj.status.code
+
+	if http_status ~= 0 then
+		local error_message = media_category_sale_top_obj.status.message
+		ngx_log(ngx_ERR, "getMediaCategorySaleTopn interface http code:"..http_status.." message:"..error_message)
+		media_category_sale_top_obj = nil
+	end
+	model_tab["media_category_sale_top_model"] = media_category_sale_top_obj
+else
+	ngx_log(ngx_ERR, "getMediaCategorySaleTopn http response unnormal status is:"..res2.status)
 end
 
 ngx.say("</br>".."-------------------------------------------- getViewAlsoView: ----------------------------------------------------".."</br>")
 if res3.status == ngx.HTTP_OK then
 	ngx.say(res3.body)
+
+	local view_also_view_obj = json.decode(res3.body)
+
+	local http_status = view_also_view_obj.status.code
+
+	if http_status ~= 0 then
+		local error_message = view_also_view_obj.status.message
+		ngx_log(ngx_ERR, "getViewAlsoView interface http code:"..http_status.." message:"..error_message)
+		view_also_view_obj = nil
+	end
+	model_tab["view_also_view_model"] = view_also_view_obj
+else
+	ngx_log(ngx_ERR, "getViewAlsoView http response unnormal status is:"..res3.status)
 end
 
 ngx.say("</br>".."-------------------------------------------- hotChannel: ----------------------------------------------------".."</br>")
 if res4.status == ngx.HTTP_OK then
 	ngx.say(res4.body)
+
+	local hot_channel_obj = json.decode(res4.body)
+
+	local http_status = hot_channel_obj.status.code
+
+	if http_status ~= 0 then
+		local error_message = hot_channel_obj.status.message
+		ngx_log(ngx_ERR, "hotChannel interface http code:"..http_status.." message:"..error_message)
+		hot_channel_obj = nil
+	end
+	model_tab["hot_channel_model"] = hot_channel_obj
+else
+	ngx_log(ngx_ERR, "hotChannel http response unnormal status is:"..res4.status)
 end
 
 ngx.say("</br>".."-------------------------------------------- getBuyAlsoBuy: ----------------------------------------------------".."</br>")
 if res5.status == ngx.HTTP_OK then
 	ngx.say(res5.body)
+
+	local buy_also_buy_obj = json.decode(res5.body)
+
+	local http_status = buy_also_buy_obj.status.code
+
+	if http_status ~= 0 then
+		local error_message = buy_also_buy_obj.status.message
+		ngx_log(ngx_ERR, "getBuyAlsoBuy interface http code:"..http_status.." message:"..error_message)
+		buy_also_buy_obj = nil
+	end
+	model_tab["buy_also_buy_model"] = buy_also_buy_obj
+else
+	ngx_log(ngx_ERR, "getBuyAlsoBuy http response unnormal status is:"..res5.status)
 end
 
 ngx.say("</br>".."-------------------------------------------- queryArticleListV2: ----------------------------------------------------".."</br>")
 if res6.status == ngx.HTTP_OK then
 	ngx.say(res6.body)
+
+	local article_obj = json.decode(res6.body)
+
+	local http_status = article_obj.status.code
+
+	if http_status ~= 0 then
+		local error_message = article_obj.status.message
+		ngx_log(ngx_ERR, "getBuyAlsoBuy interface http code:"..http_status.." message:"..error_message)
+		article_obj = nil
+	end
+	model_tab["article_model"] = article_obj
+else
+	ngx_log(ngx_ERR, "queryArticleListV2 http response unnormal status is:"..res6.status)
 end
 
+--render html
+template.render("product_page.html", model_tab)
 
 
 

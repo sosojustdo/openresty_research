@@ -1,10 +1,12 @@
+local http = require "resty.http"
+local ck = require "resty.cookie"
+
 local ngx_log = ngx.log
 local ngx_ERR = ngx.ERR
 local ngx_INFO = ngx.INFO
 local common_tab = {}
 local http_uri = "http://10.4.36.37"
-local http = require("resty.http")
-local ck = require("resty.cookie")
+
 
 
 local function read_http(args)

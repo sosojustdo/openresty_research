@@ -1,4 +1,5 @@
-local redis = require("resty.redis")
+local redis = require "resty.redis"
+
 local ngx_log = ngx.log
 local ngx_ERR = ngx.ERR
 

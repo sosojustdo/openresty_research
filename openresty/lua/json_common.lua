@@ -1,4 +1,4 @@
-local dkjson = require("resty.dkjson")
+local dkjson = require "resty.dkjson"
 
 local ngx_log = ngx.log
 local ngx_ERR = ngx.ERR
