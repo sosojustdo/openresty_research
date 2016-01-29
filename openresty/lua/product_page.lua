@@ -136,6 +136,7 @@ local res1, res2, res3, res4, res5, res6 = ngx.location.capture_multi{
 	{ "/hotChannel", {args = hotChannelTable} },
 	{ "/getBuyAlsoBuy", {args = getBuyAlsoBuyTable} },
 	{ "/queryArticleListV2", {args = queryArticleListV2Table} },
+	{ "/header" },
  }
 
 local model_tab = {}
