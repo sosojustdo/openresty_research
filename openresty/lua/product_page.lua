@@ -4,6 +4,8 @@ local template = require "resty.template"
 --关闭模板缓存
 template.caching(false)
 
+local ngx_log = ngx.log
+local ngx_ERR = ngx.ERR
 local args = ngx.req.get_uri_args()
 
 --校验请求参数

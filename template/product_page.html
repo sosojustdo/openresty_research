@@ -8,7 +8,6 @@
 	<link type="text/css" rel="stylesheet" href="css/product_page.min.css">
 </head>
 <body>
-	<!-- 页头 -->
 	{(head.html)}
 	<!-- 导航开始 -->
 	<div class="public_headernav_module padding_top_30" dd_name="头部导航">
@@ -26,12 +25,251 @@
 	</div>
 	<!-- 导航结束 -->
 	
+	<div class="product_conntent_wrap">
+		<div class="product_content clearfix">
+			 <!-- 面包屑开始 -->
+			 <div class="navigation_module" id="crumb" dd_name="面包屑">
+				<a href="index_page.html">当当读书</a>
+				<a href="classification_list_page.html?category={{media_model.data.mediaSale.mediaList[1].categoryIds}}&dimension=dd_sale">{{media_model.data.mediaSale.mediaList[1].categorys}}</a>
+				<a class="focus">{{media_model.data.mediaSale.mediaList[1].title}}</a>
+			 </div>
+			 <!-- 面包屑结束 -->
+			 
+			<!-- 左侧开始 -->
+			<div class="product_content_left">
+				<!-- 书本信息开始 -->
+				<div class="product_bookdetail_module clearfix" id="productBookDetail" dd_name="书本信息">
+					<!-- 封面 -->
+					<div class="bookcover">
+						<img onerror="this.src='img/book_def_180_260.png'" src="{{media_model.data.mediaSale.mediaList[1].coverPic}}" />
+					</div>
+					
+					<div class="bookinfor">
+						<div class="title">
+							{{media_model.data.mediaSale.mediaList[1].title}}
+							<span class="icon">电子书</span>
+						</div>
+						
+						<div class="star">
+							<span class="starlevel">
+								{% local score = media_model.data.mediaSale.mediaList[1].score 
+									if score ~= 5 then
+									local classname = "starlevel_inner_"..score %}
+									<span class="starlevel_inner {{classname}}"></span>
+								{% else %}
+									<span class="starlevel_inner"></span>
+								{% end %}							
+							</span>
+							<i class="num" id="postNum">({{article_model.data.barInfo.articleNum}}人评论)</i>
+						</div>
+						
+						<ul class="publish_infor">
+							<li>作&nbsp; 者 ：{{media_model.data.mediaSale.mediaList[1].authorPenname}}</li>
+							{% local wordCount = media_model.data.mediaSale.mediaList[1].wordCnt 
+								if  wordCount > 10000 then
+									wordCount = string.format("%.1f", wordCount/10000).."万"
+								end %}
+							<li>字&nbsp; 数 ：{{wordCount}}</li>
+							<li>出版社：&nbsp;{{media_model.data.mediaSale.mediaList[1].score}}</li>
+						</ul>
+						
+						<div class="price_line">
+							{% 
+								local priceStr, bellStr, paperpriceStr, discountStr = "", "", "", ""
+								local paperMediaPrice = media_model.data.mediaSale.mediaList[1].paperMediaPrice
+								if media_model.data.mediaSale.mediaList[1].freeBook == 1 then
+									priceStr = "免费"
+									bellStr= "免费"
+									if paperMediaPrice then
+										paperMediaPrice = "¥"..string.format("%.2f", paperMediaPrice/100)
+									end
+								else
+									if media_model.data.mediaSale.mediaList[1].mediaType == 2 then
+										bellStr = media_model.data.mediaSale.mediaList[1].price
+										priceStr = "¥"..string.format("%.2f", media_model.data.mediaSale.mediaList[1].price/100)
+										if paperMediaPrice then
+											
+											
+											
+										end										
+									end	
+								end
+							%}
+						
+							<span class="red">&yen;1.00</span>
+							<b>|</b>
+							<span class="red"><i class="icon bell"></i>100</span>
+							<b>|</b>
+							<span class="paperbook">纸书标价：&yen;29.00</span>
+							<b>|</b>
+							<span class="red percent_off">低于1折</span>
+						</div>
+					
+					
+					<div class="btn_line">
+					 <a href="javascript:;" class="btn" status="borrow" dur="259200000" id="borrowBtn" dd_name="免费借阅">免费借阅(3天)</a>
+					 <a href="javascript:;" class="btn_orange" status="buy" id="buy_now_button" devicetypecodes="pconline|ipad|iphone|android|eink|html5|einkd66|pcreader" dd_name="购买">购买</a>
+					 <a href="##" class="shopping_car addShopCartBtn btn_basic" id="addShopCartBtn" dd_name="加入购物车">加入购物车</a>
+					 <span class="collectSpan clearfix" id="collectC" data-isstore="0" dd_name="收藏">
+					  <div class="collection" data-isstore="0">
+					   <i class="icon collect"></i>
+					   <span class="text">收藏</span>
+					  </div></span>
+					 <span class="shareSpan">
+					  <div id="ShareC" dd_name="分享">
+					   <div class="shareC">
+						<i class="icon share"></i>分享
+						<div class="sharelist clearfix hide">
+						 <i class="weibo icon clicked" data-type="sina"></i>
+						 <i class="weixin icon" data-type="weixin">
+						  <div class="weixinC hide"></div></i>
+						 <i class="qq icon clicked" data-type="qzone"></i>
+						</div>
+					   </div>
+					  </div></span>
+					 <a href="javascript:;" class="phone" dd_name="在手机上阅读"><span class="phone_inner"><i class="icon"></i>在手机上阅读</span>
+					  <div class="ecode">
+					   <span class="arrow"></span>
+					   <img src="img/ecode.png" alt="" />
+					  </div></a>
+					</div>
+					</div>
+					<input id="productId" type="hidden" value="{{media_model.data.mediaSale.mediaList[1].mediaId}}" />
+					<input id="saleId" type="hidden" value="{{media_model.data.mediaSale.mediaList[1].saleId}}" />
+				</div>
+				<!-- 书本信息结束 -->
+				 
+				<!-- 作品介绍、目录、关于作者、更多信息 -->
+				<div class="product_bookinfor_module" id="bookInfo" dd_name="作品相关信息">
+					
+				</div>
+				<!-- 买了还买 -->
+				<div class="product_alsobuy_module" dd_name="买了还买">
+					<!-- <div class="product_rectitle_module">买过这本书的人还买过</div> -->
+					<div class="clearfix" id="bookAlsoBuy">
+						<!-- <div class="product_alsobuycell_module">
+	<a href="">
+		<div class="bookcover">
+			<img src="images/1.png" alt="">
+		</div>
+		<p class="title">把每一天当做梦般</p>
+		<p class="price"><span class="now">¥18.00</span>|<span class="ori">¥18.00</span></p>
+	</a>
+</div> -->
+					</div>
+					
+				</div>
+				
+				<!--  书吧 -->
+				<div class="product_bar_module" id="barModule" dd_name="书吧">
+					<div class="product_barcell_moudle clearfix" id="bar"></div>
+					<div id="barposts">
+					</div>
+					<!-- <div class="product_barmore_module">
+	<a href="">去看更多帖子</a>
+</div> -->
+					
+				</div>
+				
+			</div>
+			<!-- 左侧结束 -->
+			
+			
+			
+			
+			
+			<div class="product_content_right">
+				<!-- 强力推荐 -->
+				<div class="product_rec_wrapper"  dd_name="强力推荐">
+					 <!-- <div class="product_rectitle_module">强力推荐</div> -->
+					 <div id="recommend"></div>
+					
+				</div>
+				<!-- 移动阅读设备 -->
+				<div class="product_device_module">
+	<h3>移动阅读设备</h3>
+	<ul class="clearfix">
+		<li class="device_01">
+			<a href="">
+				<em  class="icon_line"><i class="icon icon_size_40"></i></em>
+				<em class="words">PC在线</em>
+			</a>
+		</li>
+		<li class="device_02">
+			<a href="">
+				<em  class="icon_line"><i class="icon icon_size_40"></i></em>
+				<em class="words">PC下载</em>
+			</a>
+		</li>
+		<li class="device_03">
+			<a href="">
+				<em  class="icon_line"><i class="icon icon_size_40"></i></em>
+				<em class="words">ipad</em>
+			</a>
+		</li>
+		<li class="device_04">
+			<a href="">
+				<em class="icon_line"><i class="icon icon_size_40"></i></em>
+				<em class="words">iphone</em>
+			</a>
+		</li>
+		<li class="device_05">
+			<a href="">
+				<em  class="icon_line"><i class="icon icon_size_40"></i></em>
+				<em class="words">Andriod</em>
+			</a>
+		</li>
+		<li class="device_06">
+			<a href="">
+				<em  class="icon_line"><i class="icon icon_size_40"></i></em>
+				<em class="words">阅读器</em>
+			</a>
+		</li>
+		<li class="device_07">
+			<a href="">
+				<em  class="icon_line"><i class="icon icon_size_40"></i></em>
+				<em class="words">触屏版</em>
+			</a>
+		</li>
+		<li class="device_08">
+			<a href="">
+				<em  class="icon_line"><i class="icon icon_size_40"></i></em>
+				<em class="words">都看阅读器触屏版</em>
+			</a>
+		</li>
+		<li class="device_09">
+		</li>
+	</ul>
+</div>
+				<!-- 大家都在看 -->
+				<div class="product_rec_wrapper" dd_name="大家都在看">
+					 <!-- <div class="product_rectitle_module">大家都在看</div> -->
+					 <div id="bookAlsoLook">
+					 	<!--  <div class="product_reccell_module clearfix">
+    <a href="#">
+        <div class="bookcover"><img src="images/1.png" /></div>
+        <div class="bookinfo">
+            <div class="title">把每一天当作梦一座孤岛</div>
+            <div class="author">蓝火</div>
+            <div class="price"><span class="now"><i class="">¥7.99</i></span>|<span>¥18.00</span></div>
+        </div>
+    </a>
+</div> -->
+					 </div>
+					 
+				</div>
+				<!-- 热门频道 -->
+				<div class="publish_hot_channel" dd_name="热门频道">
+				 <!-- <div class="product_rectitle_module">热门频道</div> -->
+				 <div id="hotChannel"></div>
+				</div>
+			</div>
+		</div>	
+	</div>
+	
+
 	
 	
-	<h1>code:{{media_model.status.code}}</h1>
-	
-	
-	<!-- 页尾 -->
 	{(foot.html)}
 	
 	<script type="text/javascript">
