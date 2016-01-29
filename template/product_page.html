@@ -1,0 +1,61 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>出版单品页</title>
+	<link type="text/css" rel="stylesheet" href="http://static.dangdang.com/css/win_login20150728.css?20150817">
+	<link type="text/css" rel="stylesheet" href="css/common.min.css">
+	<link type="text/css" rel="stylesheet" href="css/product_page.min.css">
+</head>
+<body>
+	
+	<!-- 页头 -->
+	{(head.html)}
+	<!-- 导航开始 -->
+	<div class="public_headernav_module padding_top_30" dd_name="头部导航">
+	    <div class="public_headernav_module">
+			<div class="nav">
+				<ul>
+					<li class="on"><a href="http://k.dangdang.com/staging/index_page.html">首页</a></li>
+					<li class="chubannav"><a href="http://k.dangdang.com/staging/publish_index_page.html">出版</a></li>
+					<li class="yuanchuangnav"><a href="http://k.dangdang.com/staging/original_index_page.html?originalSex=man">原创</a></li>
+					<li><a href="http://k.dangdang.com/staging/product_page.html?id=1900098227&mediaId=1900098227&mediaType=2#">众筹</a></li>
+					<li><a href="http://k.dangdang.com/staging/product_page.html?id=1900098227&mediaId=1900098227&mediaType=2#">手机看书</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<!-- 导航结束 -->
+	
+	
+	
+	<h1>code:{{media_model.status.code}}</h1>
+	
+	
+	<!-- 页尾 -->
+	{(foot.html)}
+	
+	<script type="text/javascript">
+        var require = {urlArgs: "v=1453881061684"}
+    </script>
+	<script type="text/javascript" src="lib/require.min.js" data-main="js/product"></script>
+	<script>
+		require.config({
+　　　　　　baseUrl: "js/",
+　　　　　　paths: {
+　　　　　　    "jquery": "../lib/jquery.min",
+                "underscore": "../lib/underscore.min",
+                "backbone": "../lib/backbone.min",
+                "loginWindow":"http://static.ddimg.cn/js/login/LoginWindow.js?20150122"
+　　　　    },
+			shim:{
+				'loginWindow': {
+	　　　　　　　　deps: ['jquery'],
+	　　　　　　　　exports: 'loginWindow'
+				}
+			}
+　　    });
+	</script>
+	<script type="text/javascript" src="http://click.dangdang.com/js_tracker.js?20150907"></script>
+</body>
+</html>

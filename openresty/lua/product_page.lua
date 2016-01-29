@@ -140,9 +140,9 @@ local res1, res2, res3, res4, res5, res6 = ngx.location.capture_multi{
 
 local model_tab = {}
 
-ngx.say("</br>".."-------------------------------------------- getMedia: ----------------------------------------------------".."</br>")
+--ngx.say("</br>".."-------------------------------------------- getMedia: ----------------------------------------------------".."</br>")
 if res1.status == ngx.HTTP_OK then
-	ngx.say(res1.body)
+	--ngx.say(res1.body)
 
 	local media_obj = json.decode(res1.body)
 
@@ -158,9 +158,9 @@ else
 	ngx_log(ngx_ERR, "getMedia http response unnormal status is:"..res1.status)
 end
 
-ngx.say("</br>".."-------------------------------------------- getMediaCategorySaleTopn: ----------------------------------------------------".."</br>")
+--ngx.say("</br>".."-------------------------------------------- getMediaCategorySaleTopn: ----------------------------------------------------".."</br>")
 if res2.status == ngx.HTTP_OK then
-	ngx.say(res2.body)
+	--ngx.say(res2.body)
 
 	local media_category_sale_top_obj = json.decode(res2.body)
 
@@ -176,9 +176,9 @@ else
 	ngx_log(ngx_ERR, "getMediaCategorySaleTopn http response unnormal status is:"..res2.status)
 end
 
-ngx.say("</br>".."-------------------------------------------- getViewAlsoView: ----------------------------------------------------".."</br>")
+--ngx.say("</br>".."-------------------------------------------- getViewAlsoView: ----------------------------------------------------".."</br>")
 if res3.status == ngx.HTTP_OK then
-	ngx.say(res3.body)
+	--ngx.say(res3.body)
 
 	local view_also_view_obj = json.decode(res3.body)
 
@@ -194,9 +194,9 @@ else
 	ngx_log(ngx_ERR, "getViewAlsoView http response unnormal status is:"..res3.status)
 end
 
-ngx.say("</br>".."-------------------------------------------- hotChannel: ----------------------------------------------------".."</br>")
+--ngx.say("</br>".."-------------------------------------------- hotChannel: ----------------------------------------------------".."</br>")
 if res4.status == ngx.HTTP_OK then
-	ngx.say(res4.body)
+	--ngx.say(res4.body)
 
 	local hot_channel_obj = json.decode(res4.body)
 
@@ -212,9 +212,9 @@ else
 	ngx_log(ngx_ERR, "hotChannel http response unnormal status is:"..res4.status)
 end
 
-ngx.say("</br>".."-------------------------------------------- getBuyAlsoBuy: ----------------------------------------------------".."</br>")
+--ngx.say("</br>".."-------------------------------------------- getBuyAlsoBuy: ----------------------------------------------------".."</br>")
 if res5.status == ngx.HTTP_OK then
-	ngx.say(res5.body)
+	--ngx.say(res5.body)
 
 	local buy_also_buy_obj = json.decode(res5.body)
 
@@ -230,9 +230,9 @@ else
 	ngx_log(ngx_ERR, "getBuyAlsoBuy http response unnormal status is:"..res5.status)
 end
 
-ngx.say("</br>".."-------------------------------------------- queryArticleListV2: ----------------------------------------------------".."</br>")
+--ngx.say("</br>".."-------------------------------------------- queryArticleListV2: ----------------------------------------------------".."</br>")
 if res6.status == ngx.HTTP_OK then
-	ngx.say(res6.body)
+	--ngx.say(res6.body)
 
 	local article_obj = json.decode(res6.body)
 
