@@ -131,13 +131,30 @@ if token then
 end
 
 
-local res1, res2, res3, res4, res5, res6 = ngx.location.capture_multi{
+--getPublishedContents http interface params table
+local getPublishedContentsTable = {action="getPublishedContents",
+	deviceSerialNo = "html5",
+	macAddr = "html5",
+	channelType = "html5",
+	clientVersionNo = "5.0.0",
+	platformSource = "DDDS-P",
+	fromPlatform = "106",
+	deviceType = "pconline",
+	mediaId = mediaId
+}
+if token then
+	getPublishedContentsTable["token"] = token
+end
+
+
+local res1, res2, res3, res4, res5, res6, res7 = ngx.location.capture_multi{
 	{ "/getMedia", {args = getMediaTable} },
 	{ "/getMediaCategorySaleTopn", {args = getMediaCategorySaleTopnTable} },
 	{ "/getViewAlsoView", {args = getViewAlsoViewTable} },
 	{ "/hotChannel", {args = hotChannelTable} },
 	{ "/getBuyAlsoBuy", {args = getBuyAlsoBuyTable} },
 	{ "/queryArticleListV2", {args = queryArticleListV2Table} },
+	{ "/getPublishedContents", {args = getPublishedContentsTable} },
 	{ "/header" },
  }
 
@@ -249,6 +266,24 @@ if res6.status == ngx.HTTP_OK then
 	model_tab["article_model"] = article_obj
 else
 	ngx_log(ngx_ERR, "queryArticleListV2 http response unnormal status is:"..res6.status)
+end
+
+--ngx.say("</br>".."-------------------------------------------- getPublishedContents: ----------------------------------------------------".."</br>")
+if res7.status == ngx.HTTP_OK then
+	--ngx.say(res7.body)
+
+	local publish_content_obj = json.decode(res7.body)
+
+	local http_status = publish_content_obj.status.code
+
+	if http_status ~= 0 then
+		local error_message = publish_content_obj.status.message
+		ngx_log(ngx_ERR, "getPublishedContents interface http code:"..http_status.." message:"..error_message)
+		publish_content_obj = nil
+	end
+	model_tab["publish_content_model"] = publish_content_obj
+else
+	ngx_log(ngx_ERR, "getPublishedContents http response unnormal status is:"..res7.status)
 end
 
 --render html

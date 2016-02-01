@@ -10,18 +10,6 @@ local getMedia_value = common_tab["http_body"]
 ngx.say(getMedia_value)
 
 
---[[
-local media_obj = json.decode(getMedia_value)
-local http_status = media_obj.status.code
-
-if http_status ~= 0 then
-	local error_message = media_obj.status.message
-	ngx_log(ngx_ERR, "getMedia interface http code:"..http_status.." message:"..error_message)
-	media_obj = nil
-end
-]]
-
-
 
 
 

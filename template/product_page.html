@@ -70,79 +70,102 @@
 									wordCount = string.format("%.1f", wordCount/10000).."万"
 								end %}
 							<li>字&nbsp; 数 ：{{wordCount}}</li>
-							<li>出版社：&nbsp;{{media_model.data.mediaSale.mediaList[1].score}}</li>
+							<li>出版社：&nbsp;{{media_model.data.mediaSale.mediaList[1].publisher}}</li>
 						</ul>
 						
 						<div class="price_line">
 							{% 
 								local priceStr, bellStr, paperpriceStr, discountStr = "", "", "", ""
 								local paperMediaPrice = media_model.data.mediaSale.mediaList[1].paperMediaPrice
+								local price = media_model.data.mediaSale.mediaList[1].price
 								if media_model.data.mediaSale.mediaList[1].freeBook == 1 then
 									priceStr = "免费"
 									bellStr= "免费"
 									if paperMediaPrice then
-										paperMediaPrice = "¥"..string.format("%.2f", paperMediaPrice/100)
+										paperpriceStr = "¥"..string.format("%.2f", (paperMediaPrice/100))
 									end
 								else
 									if media_model.data.mediaSale.mediaList[1].mediaType == 2 then
-										bellStr = media_model.data.mediaSale.mediaList[1].price
-										priceStr = "¥"..string.format("%.2f", media_model.data.mediaSale.mediaList[1].price/100)
+										bellStr = price
+										priceStr = "¥"..string.format("%.2f", (price/100))
 										if paperMediaPrice then
-											
-											
-											
+											paperpriceStr = "¥"..string.format("%.2f", paperMediaPrice/100)
+											local discountNum = string.format("%.1f", (price/paperMediaPrice)*10)
+											if (1 > tonumber(discountNum)) then
+												discountStr = "低于1折"
+											else
+												discountStr = discountNum.."折"
+											end
 										end										
-									end	
+									end
 								end
 							%}
-						
-							<span class="red">&yen;1.00</span>
+							<span class="red">{{priceStr}}</span>
 							<b>|</b>
-							<span class="red"><i class="icon bell"></i>100</span>
-							<b>|</b>
-							<span class="paperbook">纸书标价：&yen;29.00</span>
-							<b>|</b>
-							<span class="red percent_off">低于1折</span>
+							<span class="red"><i class="icon bell"></i>{{bellStr}}</span>						
+							{% if paperpriceStr ~= "" then %}
+								<b>|</b><span class="paperbook">纸书标价：{{paperpriceStr}}</span>
+							{% end %}		
+							{% if discountStr ~= "" then %}
+								<b>|</b><span class="red percent_off">{{discountStr}}</span>
+							{% end %}													
 						</div>
-					
-					
-					<div class="btn_line">
-					 <a href="javascript:;" class="btn" status="borrow" dur="259200000" id="borrowBtn" dd_name="免费借阅">免费借阅(3天)</a>
-					 <a href="javascript:;" class="btn_orange" status="buy" id="buy_now_button" devicetypecodes="pconline|ipad|iphone|android|eink|html5|einkd66|pcreader" dd_name="购买">购买</a>
-					 <a href="##" class="shopping_car addShopCartBtn btn_basic" id="addShopCartBtn" dd_name="加入购物车">加入购物车</a>
-					 <span class="collectSpan clearfix" id="collectC" data-isstore="0" dd_name="收藏">
-					  <div class="collection" data-isstore="0">
-					   <i class="icon collect"></i>
-					   <span class="text">收藏</span>
-					  </div></span>
-					 <span class="shareSpan">
-					  <div id="ShareC" dd_name="分享">
-					   <div class="shareC">
-						<i class="icon share"></i>分享
-						<div class="sharelist clearfix hide">
-						 <i class="weibo icon clicked" data-type="sina"></i>
-						 <i class="weixin icon" data-type="weixin">
-						  <div class="weixinC hide"></div></i>
-						 <i class="qq icon clicked" data-type="qzone"></i>
+											
+						<div class="btn_line">
+							{% local link = "http://e.dangdang.com/pc/reader/index.html?id="..media_model.data.mediaSale.mediaList[1].mediaId %}
+							{% if media_model.data.mediaSale.mediaList[1].freeBook == 1 then 
+								if media_model.data.mediaSale.mediaList[1].isWholeAuthority == 1 then %}
+									<a href="{{link}}" class="btn" status="readNow" target="_blank" id="readNow" dd_name="立即阅读">立即阅读</a>
+								{% else %}
+									<a href="javascript:;" class="btn" status="free" id="freeGet" dd_name="免费获取">免费获取</a>
+								{% end %}
+							{% else 
+								local borrowEndTime = media_model.data.mediaSale.mediaList[1].borrowEndTime
+								if media_model.data.mediaSale.mediaList[1].canBorrow == 1 then
+									local duration = media_model.data.mediaSale.mediaList[1].borrowDuration
+									local durDay = duration/1000/60/60/24
+									if borrowEndTime == nil or borrowEndTime == "" then %}
+										<a href="javascript:;" class="btn" status="borrow" dur ="{{duration}}" id="borrowBtn" dd_name="免费借阅">免费借阅({{durDay}}天)</a>
+										<a href="javascript:;" class="btn_orange" status="buy" id="buy_now_button" deviceTypeCodes="{{media_model.data.mediaSale.mediaList[1].deviceTypeCodes}}" dd_name="购买">购买</a>
+										<a href="##" class="shopping_car addShopCartBtn btn_basic" id="addShopCartBtn" dd_name="加入购物车">加入购物车</a>
+									{% else 
+										if ( borrowEndTime - (ngx.now * 1000)) > 0 then %}	
+											<a href="{{link}}" class="btn" status="readNow" target="_blank" id="readNowBtn" dd_name="立即阅读">立即阅读</a>
+										{% else %}
+											<a href="javascript:;" class="btn" status="reborrow" id="reborrowBtn" dd_name="续借" >续借</a>
+											<a href="javascript:;" class="btn_orange" status="buy" id="buy_now_button" deviceTypeCodes="{{media_model.data.mediaSale.mediaList[1].deviceTypeCodes}}" dd_name="购买">购买</a>
+											<a href="##" class="shopping_car addShopCartBtn btn_basic" id="addShopCartBtn" dd_name="加入购物车">加入购物车</a>
+										{% end %}							
+									{% end %}								
+								{% else
+									if media_model.data.mediaSale.mediaList[1].isWholeAuthority == 1 then %}
+										<a href="{{link}}" class="btn" status="readNow" target="_blank" id="readNowBtn" dd_name="立即阅读">立即阅读</a>									
+									{% else %}
+										<a href="{{link}}" class="btn" status="try" target="_blank" id="tryBtn" dd_name="试读">试读</a>
+										<a href="javascript:;" class="btn_orange" status="buy" id="buy_now_button" deviceTypeCodes="{{media_model.data.mediaSale.mediaList[1].deviceTypeCodes}}" dd_name="购买">购买</a>
+										<a href="##" class="shopping_car addShopCartBtn btn_basic" id="addShopCartBtn" dd_name="加入购物车">加入购物车</a>
+									{% end %}			
+								{% end %}									
+							{% end %}
+							<span class="collectSpan clearfix" id="collectC" data-isStore="{{media_model.data.mediaSale.mediaList[1].isStore}}"" dd_name="收藏"></span>
+							<span class="shareSpan"><div id="ShareC" dd_name="分享"></div></span>
+							<a href="javascript:;" class="phone" dd_name="在手机上阅读">
+								<span class="phone_inner"><i class="icon"></i>在手机上阅读</span>
+								<div class="ecode"><span class="arrow"></span><img src="img/ecode.png" alt=""></div>
+							</a>						
 						</div>
-					   </div>
-					  </div></span>
-					 <a href="javascript:;" class="phone" dd_name="在手机上阅读"><span class="phone_inner"><i class="icon"></i>在手机上阅读</span>
-					  <div class="ecode">
-					   <span class="arrow"></span>
-					   <img src="img/ecode.png" alt="" />
-					  </div></a>
-					</div>
 					</div>
 					<input id="productId" type="hidden" value="{{media_model.data.mediaSale.mediaList[1].mediaId}}" />
 					<input id="saleId" type="hidden" value="{{media_model.data.mediaSale.mediaList[1].saleId}}" />
 				</div>
 				<!-- 书本信息结束 -->
-				 
+				
 				<!-- 作品介绍、目录、关于作者、更多信息 -->
 				<div class="product_bookinfor_module" id="bookInfo" dd_name="作品相关信息">
 					
 				</div>
+				
+				
 				<!-- 买了还买 -->
 				<div class="product_alsobuy_module" dd_name="买了还买">
 					<!-- <div class="product_rectitle_module">买过这本书的人还买过</div> -->
