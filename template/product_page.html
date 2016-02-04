@@ -528,6 +528,58 @@
 	
 	{(foot.html)}
 	
+	<!-- 右侧快捷功能按钮 start -->
+    <div class="returntop">
+		<div class="public_sideecode_module" dd_name="右侧二维码">
+			<div class="wrap">
+				<a href="javascript:;" class="sao"><span class="ma"><i></i><img src="img/erweima.png" /></span></a>
+				<span class="close"></span>
+			</div>
+		</div>
+		<div class="public_totop_module" dd_name="右侧返回顶部"></div>
+	</div>
+    <!-- 右侧快捷功能按钮 end -->
+	
+	<!-- 续借弹框 -->
+	
+	<!-- 发帖弹窗 -->
+	<script type="text/template" id="postModuleTemplate">
+		<div class="shadow post"></div>
+		<div class="window post">
+			<i class="icon close">关闭</i>
+			<div class="form">
+				<div class="item">
+					<div class="label">标题:</div>
+					<div class="content">
+						<input type="text" placeholder="" id="postTitle"/>
+					</div>
+				</div>
+				<div class="item">
+					<div class="label">内容:</div>
+					<div class="content" id="postContent">
+						<iframe frameborder="0" id="ueditorIframe" name="ueditorIframe" width="700" height="530" src="/article/uePC.go"></iframe>
+					</div>
+				</div>
+				<button class="submitbtn">发布</button>
+			</div>
+		</div>
+	</script>
+
+	<!-- 购买弹窗begin html_modules/payment/popUp.html-->
+	<div class="payment_popUp_module">
+		<div class="popUp_bg"></div>
+		<div class="popUp_detail">
+		</div>
+	</div>
+	<div class="load_module">
+    	<div class="gray_bg"></div>
+    	<div class="load_detail_container">
+    		<p><img src="img/loading.gif" alt=""></p>
+    		<p>支付中...</p>
+    	</div>
+    </div>
+	<!-- 购买弹窗end -->
+	
 	<script type="text/javascript">
         var require = {urlArgs: "v=1453881061684"}
     </script>
