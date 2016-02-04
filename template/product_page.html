@@ -8,6 +8,7 @@
 	<link type="text/css" rel="stylesheet" href="css/product_page.min.css">
 </head>
 <body>
+	{% local price_model = require "price" %}
 	{(head.html)}
 	<!-- 导航开始 -->
 	<div class="public_headernav_module padding_top_30" dd_name="头部导航">
@@ -232,7 +233,12 @@
 										<div class="bookcover"><a href="{{link}}" target="_blank"><img onerror = "javascript:nofind(this,\'img/book_def_74_105.png\');" src="{{coverPic}}" /></a></div>
 										<p class="title"><a href="{{link}}" target="_blank" title="{{title}}">{{title}}</a></p>
 										<p class="price">
-											<!-- TODO price -->
+											{% local price = price_model.dealPrice2(v) %}
+											<span class="now">{{price}}</span>
+											{% local originPrice = price_model.originPrice(v) 
+												if originPrice ~= "" then %}
+												|<span class="ori">{{originPrice}}</span>
+											{% end %}
 										</p>										
 								</div>							
 							{% end 					
@@ -359,7 +365,12 @@
 											<div class="title"><a href="{{link}}" target="_blank"  title="{{mediaList["title"]}}">{{mediaList["title"]}}</a></div>
 											<div class="author">{{mediaList["authorPenname"]}}</div>
 											<div class="price">
-												<!-- TODO price -->
+												{% local price = price_model.dealPrice1(v) %}
+												<span class="now">{{price}}</span>
+												{% local originPrice = price_model.originPrice(mediaList) 
+													if originPrice ~= nil and originPrice ~= "" then %}
+													|<span class="ori">{{originPrice}}</span>
+												{% end %}
 											</div>
 										</div>
 									</div>
@@ -454,7 +465,12 @@
 												<div class="title"><a href="{{link}}" target="_blank"  title="{{v["title"]}}">{{v["title"]}}</a></div>
 												<div class="author">{{v["authorPenname"]}}</div>
 												<div class="price">
-													<!-- TODO price -->
+													{% local price = price_model.dealPrice2(v) %}
+													<span class="now">{{price}}</span>
+													{% local originPrice = price_model.originPrice(v) 
+														if originPrice ~= "" then %}
+														|<span class="ori">{{originPrice}}</span>
+													{% end %}
 												</div>
 											</div>
 										</div>
