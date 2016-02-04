@@ -248,6 +248,30 @@ ddbase.getUserName = function(){
     }
     return username;
 }
+ddbase.getCustId=function(){
+    // 由于退出登录清除不了custId的cookie，为了防止多账号登陆出现的MDD_custId不能更新的问题，特改为每次刷新页面都重新请求custId
+    // var custId= decodeURIComponent(ddbase.getCookie("MDD_custId"));
+    // if (!custId || custId==''||custId==null){
+    if(ddbase.token() && ddbase.token()!=null){
+        $.ajax({
+            method:'GET',
+            url:'/media/api2.go?action=getUser&selfType=0&pubId=5&rewardIcon='+ddbase.setBaseApiParams(),
+            async:false,
+            success:function(response){
+                if(parseInt(response.status.code) == 0){
+                    var userInfo = response.data.userInfo;
+                    // ddbase.setCookie('MDD_custId',userInfo.pubCustId,8760);
+                    custId = decodeURIComponent(userInfo.pubCustId);
+                }
+            }
+        })
+    // }
+        return custId;
+    }else{
+        return false;
+    }
+        
+}
 //设置公共参数
 ddbase.setBaseApiParams = function(){
             var channelId = ddbase.getQueryString('channelId');
@@ -675,27 +699,35 @@ define('collect',['jquery','underscore','ddbase','loginModule'],function($,_,ddb
 	}
 });
 define('productBarTemplate',["jquery","underscore","backbone"],function ($,_,Backbone) {
-	var productBarTemplate = '<div class="pic">'+
-	    '<img src="<%=data.get("barImgUrl")%>" alt="">'+
-	    '</div>'+
-	    '<div class="desc">'+
-	    '<% var link = "bar_detail_page.html?barId="+data.get("barId")%>'+
-	    	 '<h1 class="title"><a href="<%=link%>"><%=data.get("barName")%></a></h1>'+
-	    	  '<div class="content"><a href="<%=link%>"><%=data.get("barDesc")%></a></div>'+
-	    '</div>'+
-	    '<div class="fans clearfix">'+
-	    	'<div class="fans_num">'+
-	    		'<i class="icon icon_size_50"></i>'+
-	    		'<p class="num">粉丝<%=data.get("memberNum")%></p>'+
-	    	'</div>'+
-	    	'<a class="bar_write_btn margin_top_20" href="javascript:;" memberStatus=<%=data.get("memberStatus")%> barId=<%=data.get("barId")%> >发帖</a>'+
-	    '</div>'+
-	    '<div class="masks" id="mask"></div>'+
-		'<div class="pop_enter_wrap" id="enterBar">'+
-			'<div class="opacity_border"></div>'+
-			'<div class="pop_enter">'+
-				'<img src="img/pop_enter_bar.jpg" alt="">'+
-				'<p class="pop_btn_line"><a href="javascript:;" class="no pop_btn" status="0">取消</a><a href="javascript:;" class="yes pop_btn" status="1" barId=<%=data.get("barId")%>>加入</a></p>'+
+	var productBarTemplate = '<div class="header">'+
+			'<p><%=data.get("barName")%>书吧</p>'+
+			'<div class="bar"></div>'+
+		'</div>'+
+		'<div class="inner clearfix">'+
+			'<div class="pic">'+
+		    	'<div class="pic_wrap"><img src="<%=data.get("barImgUrl")%>" alt=""></div>'+
+		    	'<div class="name">吧主</div>'+
+		    '</div>'+
+		    '<div class="desc">'+
+		    '<% var link = "bar_detail_page.html?barId="+data.get("barId")%>'+
+		    	 '<h1 class="title"><a href="<%=link%>"><%=data.get("barName")%></a></h1>'+
+		    	  '<div class="content"><a href="<%=link%>"><%=data.get("barDesc")%></a></div>'+
+		    '</div>'+
+		    '<div class="fans clearfix">'+
+		    	'<div class="fans_num">'+
+		    		'<i class="icon icon_size_50"></i>'+
+		    		'<p class="num">粉丝<%=data.get("memberNum")%></p>'+
+		    	'</div>'+
+		    	'<a class="bar_write_btn" href="javascript:;" memberStatus=<%=data.get("memberStatus")%> barId=<%=data.get("barId")%> >发帖</a>'+
+		    	'<a class="read_more_post" href="bar_detail_page.html?barId=<%=data.get("barId")%>" target="_blank">查看全部帖子</a>'+
+		    '</div>'+
+		    '<div class="masks" id="mask"></div>'+
+			'<div class="pop_enter_wrap" id="enterBar">'+
+				'<div class="opacity_border"></div>'+
+				'<div class="pop_enter">'+
+					'<img src="img/pop_enter_bar.jpg" alt="">'+
+					'<p class="pop_btn_line"><a href="javascript:;" class="no pop_btn" status="0">取消</a><a href="javascript:;" class="yes pop_btn" status="1" barId=<%=data.get("barId")%>>加入</a></p>'+
+				'</div>'+
 			'</div>'+
 		'</div>'
 	    return productBarTemplate;
@@ -2254,7 +2286,7 @@ require(['jquery','underscore','ddbase','','productBooklistModule','collect',"pr
     })
     //阅读
     $('#content').delegate('.readbtn','click',function(){
-        window.open('http://e.dangdang.com/ebook/read.do?productId='+setting.id,'_blank')
+        window.open('http://e.dangdang.com/pc/reader/index.html?id='+setting.mediaId,'_blank')
     })
     
 
@@ -2315,8 +2347,12 @@ require(['jquery','underscore','ddbase','','productBooklistModule','collect',"pr
             return;
         }
         var val = $('#supportNum').val();
-        if(val){
-            $.get('/media/api.go?action=reward'+ddbase.baseApiParams,{
+        if(!val){
+            ddbase.setMessageTip('请输入打赏铃铛数');
+            $('.opration input').focus();
+            return;
+        }
+        $.get('/media/api.go?action=reward'+ddbase.baseApiParams,{
                 saleId:setting.id,
                 cons:val,
                 token:ddbase.token()
@@ -2340,7 +2376,6 @@ require(['jquery','underscore','ddbase','','productBooklistModule','collect',"pr
                         $('#supportMessage').hide().html('');
                     },3000)
             })
-        }
     })
 
     //作者其他作品和书吧
@@ -2367,7 +2402,7 @@ require(['jquery','underscore','ddbase','','productBooklistModule','collect',"pr
     // 买过此书的人还买过
     new bookList.view({
         el:"#bookAlsoBuy",
-        dataUrl:"/media/api.go?action=getBuyAlsoBuy&returnFields=&start=0&end=5&token=",
+        dataUrl:"/media/api.go?action=getBuyAlsoBuy&returnFields=&start=0&end=5&needPrice=1",
         template:originalAlsoBuyTemplate
     })
 

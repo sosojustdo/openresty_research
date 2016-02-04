@@ -359,6 +359,30 @@ ddbase.getUserName = function(){
     }
     return username;
 }
+ddbase.getCustId=function(){
+    // 由于退出登录清除不了custId的cookie，为了防止多账号登陆出现的MDD_custId不能更新的问题，特改为每次刷新页面都重新请求custId
+    // var custId= decodeURIComponent(ddbase.getCookie("MDD_custId"));
+    // if (!custId || custId==''||custId==null){
+    if(ddbase.token() && ddbase.token()!=null){
+        $.ajax({
+            method:'GET',
+            url:'/media/api2.go?action=getUser&selfType=0&pubId=5&rewardIcon='+ddbase.setBaseApiParams(),
+            async:false,
+            success:function(response){
+                if(parseInt(response.status.code) == 0){
+                    var userInfo = response.data.userInfo;
+                    // ddbase.setCookie('MDD_custId',userInfo.pubCustId,8760);
+                    custId = decodeURIComponent(userInfo.pubCustId);
+                }
+            }
+        })
+    // }
+        return custId;
+    }else{
+        return false;
+    }
+        
+}
 //设置公共参数
 ddbase.setBaseApiParams = function(){
             var channelId = ddbase.getQueryString('channelId');
@@ -808,7 +832,8 @@ define('original_product_catalog_left',["jquery","underscore","ddbase"],function
     	var mediaId= ddbase.getQueryString("mediaId");
 
 		$.get(obj.url+'&mediaId='+mediaId,function(data){
-			$(obj.container).html(templ(data.data));
+            var multiData=$.extend({},{data:data.data},{mediaId:mediaId});
+			$(obj.container).html(templ(multiData));
 		})
 	}
 

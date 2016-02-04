@@ -824,8 +824,199 @@ define('publicMethod',["jquery","publicHeaderNav","publicHeaderChildnavModule","
     };
     return publicMethod;
 });
-require(['jquery',"publicMethod"], function ($,publicMethod) {
-    publicMethod.init();
+define('guessulikeTemplate',["jquery","underscore","backbone"],function ($,_,Backbone) {
+var productAlsoBuyTemplate = '<%if(data.length>0){%>'+
+		'<div class="product_rectitle_module">猜你喜欢</div>'+
+			'<%data.each(function(item){%>'+
+			'<div class="product_alsobuycell_module">'+
+				'<%var link = ddbase.getBookUrl({saleId:item.get("saleId"),mediaId:item.get("mediaId"),mediaType:item.get("mediaType"),productId:item.get("productId")})%>'+
+			   
+			        '<div class="bookcover"><a href="<%=link%>" target="_blank"><img onerror = "javascript:nofind(this,\'img/book_def_74_105.png\');" src="<%=item.get("coverPic").replace("_aa_cover","_cc_cover")%>" /></a></div>'+
+			        '<p class="title"><a href="<%=link%>" target="_blank" title="<%=item.get("title")%>"><%=item.get("title")%></a></p>'+
+			        '<p class="price">'+
+			        	'<%var price = dealPrice.dealPrice2(item.toJSON())%>'+
+			        	'<span class="now"><%=price%></span>'+
+
+						'<%var originPrice = dealPrice.originPrice(item.toJSON())%>'+
+						
+						'<%if(originPrice !=""){%>'+
+							'|<span class="ori"><%=originPrice%></span>'+
+						'<%}%>'+
+					'</p>'+
+			'</div>'+
+		'<%})%>'+
+	'<%}%>'
+
+	return productAlsoBuyTemplate;
 });
-define("pcmodule", function(){});
+define('dealPrice',[],function (){
+    var dealPrice={
+        init:function (item){
+            var priceStr="";
+            if(item!=null && item.mediaList && item.mediaList[0]){
+                var item_detail = item.mediaList[0];
+                if(item_detail.promotionId == 3 || item_detail.freeBook == 1){ //免费
+                    priceStr = '免费';
+                }else{
+                    if(item_detail.mediaType == 2){ //出版物
+                        var finalPrice;
+                        // 出版物只看 price
+                      
+                        if( item_detail.price == undefined){
+                             priceStr = '';
+                        }else if(item_detail.price == 0){
+                            priceStr = '免费';
+                        }else{
+                             priceStr = '￥'+(parseInt(item_detail.price)/100).toFixed(2);
+                        }
+    
+                    }else if(item_detail.mediaType == 1){ //原创
+                        if(item.isSupportFullBuy == 1){ //已完结
+                            if(item_detail.price == undefined){
+                                priceStr = '';
+                            }else if(item_detail.price == 0){
+                                priceStr = '免费';
+                            }else{
+                                priceStr = parseInt(item_detail.price)+'铃铛/本';
+                            }
+                           
+                        }else{ //未完结
+                            if(item_detail.priceUnit == undefined){
+                                priceStr="";
+                            }else if(item_detail.priceUnit == 0){
+                                priceStr = '免费';
+                            }else{
+                                priceStr = parseInt(item_detail.priceUnit)+'铃铛/千字';
+                            }
+                        }
+                    }else if(item_detail.mediaType == 3){ //纸书
+                        if(item_detail.lowestPrice == 0){
+                            priceStr = '免费';
+                        }else{
+                            priceStr = '￥'+(parseInt(item_detail.lowestPrice*100)/100).toFixed(2);
+                        }
+
+                    }
+                };
+                return priceStr;
+            }
+        },
+        dealPrice2:function(item_detail){
+            //mediaList>item>isSupportFullBuy+priceUnit,例如:猜你喜欢
+            var priceStr="";
+            if(item_detail!=null){
+                if(item_detail.promotionId == 3){ //免费
+                    priceStr = '免费';
+                }else{
+                    if(item_detail.mediaType == 2){ //出版物
+                        var finalPrice;
+                        // 出版物只看 price
+                      
+                        if( item_detail.price == undefined){
+                             priceStr = '';
+                        }else if(item_detail.price == 0){
+                            priceStr = '免费';
+                        }else{
+                             priceStr = '￥'+(parseInt(item_detail.price)/100).toFixed(2);
+                        }
+
+                    }else if(item_detail.mediaType == 1){ //原创
+                        if(item_detail.isSupportFullBuy == 1){ //已完结
+                            if(item_detail.price == undefined){
+                                priceStr = '';
+                            }else if(item_detail.price == 0){
+                                priceStr = '免费';
+                            }else{
+                                priceStr = parseInt(item_detail.price)+'铃铛/本';
+                            }
+                        }else{ //未完结
+                            if(item_detail.priceUnit == undefined){
+                                priceStr="";
+                            }else if(item_detail.priceUnit == 0){
+                                priceStr = '免费';
+                            }else{
+                                priceStr = parseInt(item_detail.priceUnit)+'铃铛/千字';
+                            }
+                        }
+                    }else if(item_detail.mediaType == 3){ //纸书
+                        if(item_detail.lowestPrice == 0){
+                            priceStr = '免费';
+                        }else{
+                            priceStr = '￥'+(parseInt(item_detail.lowestPrice*100)/100).toFixed(2);
+                        }
+
+                    }
+                };
+            }
+            return priceStr;
+        },
+        originPrice:function(item_detail){
+            var originPrice="";
+            if(item_detail.paperBookId !=undefined &&item_detail.paperBookId !=""){
+                originPrice = '￥'+(parseInt(item_detail.paperBookPrice)/100).toFixed(2);
+            }
+
+            return originPrice;
+        }
+    }
+
+    return dealPrice;
+})
+;
+define('productBooklistModule',["jquery","underscore","backbone","ddbase","dealPrice"],function ($,_,Backbone,ddbase,dealPrice) {
+	var bookList = {};
+	bookList.module = Backbone.Model.extend({
+        defaults: {
+            mediaList: [
+                {
+                  authorPenname: "",
+				  coverPic: "",
+				   mediaId: "",
+				   mediaType: "",
+				   saleId: "",
+				   subTitle: "",
+				   title: ""
+                }
+            ]
+        }
+    });
+    bookList.collection = Backbone.Collection.extend({
+    	model : bookList.module
+    });
+    bookList.view = Backbone.View.extend({
+    	initialize:function(options){
+    		var self = this;
+    		self.el = options.el;
+    		self.dataUrl = options.dataUrl+ddbase.baseApiParams+"&mediaId="+ddbase.getQueryString("id");
+    		self.template = options.template;
+    		self.collection = new bookList.collection();
+            self.dataKey = options.dataKey || 'mediaList';
+    		self.render();
+    	},
+    	render:function(){
+    		var self = this;
+	    	self.collection.fetch({
+	    		url:self.dataUrl,
+	    		success:function(collection,response){
+	    			if(response.status.code == 0){
+	    				self.collection.set(response.data[self.dataKey]);
+	    				$(self.el).html(_.template(self.template)({data:self.collection,dealPrice:dealPrice,ddbase:ddbase}));
+	    			}
+	    		},
+	    		error:function(){
+
+	    		}
+	    	});
+    	}
+    })
+    return bookList;
+});
+require(["jquery","publicMethod","guessulikeTemplate","productBooklistModule","ddbase"],function($,publicMethod,guessulikeTemplate,productBooklistModule,ddbase){
+	
+    publicMethod.init();
+	// 强力推荐
+	var BookAlsoLookView = new productBooklistModule.view({el:"#bookAlsoBuy",dataUrl:"/media/api.go?action=getGuessulike&start=0&end=7&needPrice=1",template:guessulikeTemplate})
+	
+});
+define("error", function(){});
 

@@ -248,6 +248,30 @@ ddbase.getUserName = function(){
     }
     return username;
 }
+ddbase.getCustId=function(){
+    // 由于退出登录清除不了custId的cookie，为了防止多账号登陆出现的MDD_custId不能更新的问题，特改为每次刷新页面都重新请求custId
+    // var custId= decodeURIComponent(ddbase.getCookie("MDD_custId"));
+    // if (!custId || custId==''||custId==null){
+    if(ddbase.token() && ddbase.token()!=null){
+        $.ajax({
+            method:'GET',
+            url:'/media/api2.go?action=getUser&selfType=0&pubId=5&rewardIcon='+ddbase.setBaseApiParams(),
+            async:false,
+            success:function(response){
+                if(parseInt(response.status.code) == 0){
+                    var userInfo = response.data.userInfo;
+                    // ddbase.setCookie('MDD_custId',userInfo.pubCustId,8760);
+                    custId = decodeURIComponent(userInfo.pubCustId);
+                }
+            }
+        })
+    // }
+        return custId;
+    }else{
+        return false;
+    }
+        
+}
 //设置公共参数
 ddbase.setBaseApiParams = function(){
             var channelId = ddbase.getQueryString('channelId');
@@ -854,7 +878,7 @@ define('postComment',["jquery", "underscore", "ddbase", "loginModule"], function
     comment_list.init = function(obj) {
         var token = ddbase.token();
         this.param = ddbase.getQueryString(obj.param);
-        this.custId = decodeURIComponent(ddbase.getCookie("MDD_custId")) || '';
+        this.custId=ddbase.getCustId();
         this.pageNum = 0;
         this.lastCommentId = 0;
         this.targetSource = obj.targetSource
@@ -946,6 +970,7 @@ define('postComment',["jquery", "underscore", "ddbase", "loginModule"], function
             $("#post_to_article").click(function() {
                 var value = $.trim($("#reply_to_article").val());
                 if (value && value.length < 200) {
+                    $(this).prop("disabled",true);
                     var obj = {
                         targetId: self.param,
                         content: value,
@@ -963,6 +988,7 @@ define('postComment',["jquery", "underscore", "ddbase", "loginModule"], function
                         success: function(data) {
                             $("#reply_to_article").val("");
                             ddbase.setMessageTip("神评论发布成功")
+                            $("#post_to_article").removeAttr("disabled");
                             if (data.status.code == 0) {
                                 self.getData(self.url, true);
                             } else {
@@ -970,12 +996,15 @@ define('postComment',["jquery", "underscore", "ddbase", "loginModule"], function
                             }
                         },
                         error: function(data) {
+                            $("#post_to_article").removeAttr("disabled");
                             alert("呦，断网了。。。");
                         }
                     });
                 } else {
                     ddbase.setMessageTip("请输入评论内容")
+                    $("#post_to_article").removeAttr("disabled");
                 }
+                return false;
             })
 
         } else {
@@ -1074,10 +1103,12 @@ define('postComment',["jquery", "underscore", "ddbase", "loginModule"], function
                 }
 
                 form.find(".post_level1").off().on("click", function() {
-
+                    var that = $(this);
                     var textareaValue = form.find("textarea").val();
                     var value = $.trim(textareaValue);
                     if (value && value.length < 200) {
+                        that.prop("disabled",true)
+                        $(this).prop("disabled",true);
                         var obj = {
                             targetId: targetId,
                             content: value,
@@ -1093,18 +1124,22 @@ define('postComment',["jquery", "underscore", "ddbase", "loginModule"], function
                             data: obj,
                             dataType: "json",
                             success: function(data) {
+                                that.removeAttr("disabled")
                                 form[0].reset();
                                 if (data.status.code == 0) {
+                                    ddbase.setMessageTip("神评论发布成功")
                                     self.getData(self.url, true);
                                 } else {
                                     ddbase.setMessageTip(data.status.message)
                                 }
                             },
                             error: function(data) {
+                                that.removeAttr("disabled")
                                 alert("呦，断网了。。。");
                             }
                         });
                     } else {
+                        that.removeAttr("disabled")
                         ddbase.setMessageTip("请输入评论内容")
                     }
                 })
@@ -1127,9 +1162,11 @@ define('postComment',["jquery", "underscore", "ddbase", "loginModule"], function
                     form.slideDown()
                 }
                 form.find(".post_level2").off().on("click", function() {
+                    var that = $(this);
                     var textareaValue = form.find("textarea").val();
                     var value = $.trim(textareaValue);
                     if (value && value.length < 200) {
+                        that.prop("disabled",true);
                         var obj = {
                             targetId: targetId,
                             content: value,
@@ -1145,6 +1182,7 @@ define('postComment',["jquery", "underscore", "ddbase", "loginModule"], function
                             data: obj,
                             dataType: "json",
                             success: function(data) {
+                                that.removeAttr("disabled")
                                 form[0].reset();
                                 if (data.status.code == 0) {
                                     self.getData(self.url, true);
@@ -1153,10 +1191,12 @@ define('postComment',["jquery", "underscore", "ddbase", "loginModule"], function
                                 }
                             },
                             error: function(data) {
+                                that.removeAttr("disabled")
                                 alert("呦，断网了。。。");
                             }
                         });
                     } else {
+                        that.removeAttr("disabled")
                         ddbase.setMessageTip("请输入评论内容")
                     }
                 })
@@ -1196,6 +1236,7 @@ define('postComment',["jquery", "underscore", "ddbase", "loginModule"], function
                 hostId: self.hostId,
                 writerId: self.writerId
             }
+            $(".loading").remove();
             if (flag && flag != undefined) {
                 $(self.container).html(self.templ(multiData));
             } else {
@@ -1233,7 +1274,7 @@ define('postComment',["jquery", "underscore", "ddbase", "loginModule"], function
             var viewHeight = $(window).height();
             if (scrollTop + viewHeight > winHeight - self.distance && !self.star&&self.lastCommentId!=0) {
                 self.star = true
-                $(".loading").remove();
+                // $(".loading").remove();
                 self.getData(self.url);
             }
         })
@@ -1598,7 +1639,7 @@ define('barPostContent',["jquery", "ddbase"], function($, ddbase) {
         var contentUrl = obj.url + "&mediaDigestId=" + mediaDigestId + ddbase.setBaseApiParams();
         var templ = _.template($(obj.template).html());
         var token = ddbase.token() || '';
-        var custId = decodeURIComponent(ddbase.getCookie("MDD_custId")) || '';
+        var custId=ddbase.getCustId();
 
         $.get(contentUrl, function(data) {
             if (data.status.code != 0) {

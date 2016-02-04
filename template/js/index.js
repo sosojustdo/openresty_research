@@ -520,6 +520,30 @@ ddbase.getUserName = function(){
     }
     return username;
 }
+ddbase.getCustId=function(){
+    // 由于退出登录清除不了custId的cookie，为了防止多账号登陆出现的MDD_custId不能更新的问题，特改为每次刷新页面都重新请求custId
+    // var custId= decodeURIComponent(ddbase.getCookie("MDD_custId"));
+    // if (!custId || custId==''||custId==null){
+    if(ddbase.token() && ddbase.token()!=null){
+        $.ajax({
+            method:'GET',
+            url:'/media/api2.go?action=getUser&selfType=0&pubId=5&rewardIcon='+ddbase.setBaseApiParams(),
+            async:false,
+            success:function(response){
+                if(parseInt(response.status.code) == 0){
+                    var userInfo = response.data.userInfo;
+                    // ddbase.setCookie('MDD_custId',userInfo.pubCustId,8760);
+                    custId = decodeURIComponent(userInfo.pubCustId);
+                }
+            }
+        })
+    // }
+        return custId;
+    }else{
+        return false;
+    }
+        
+}
 //设置公共参数
 ddbase.setBaseApiParams = function(){
             var channelId = ddbase.getQueryString('channelId');
@@ -1220,7 +1244,8 @@ define('indexFocusone',["jquery"],function($) {
     return indexFocusone;
 });
 define('indexLimitedTemplate',["jquery","underscore","backbone",'ddbase'],function ($,_,Backbone,ddbase) {
-    var indexLimitedTemplate = '<div class="index_subnav_module">'+
+    var indexLimitedTemplate = '<% if(data.length>0){%>'+
+    '<div class="index_subnav_module">'+
         '<ul class="nav clearfix">'+
             '<li class="first on">'+
                 '<a href="morelist_page.html?columnType=rec_limited_free&title=限时免费" target="_blank">限时免费</a>'+
@@ -1269,7 +1294,9 @@ define('indexLimitedTemplate',["jquery","underscore","backbone",'ddbase'],functi
                 
             '<%}%>'+
        '<%})%>'+
-    '</div>'
+    '</div>'+
+'<%}%>'
+    
     
    return indexLimitedTemplate;
 });
@@ -1890,6 +1917,8 @@ require(["jquery","lazyload","publicTabModule","indexClassModule","publicMethod"
     indexFocusone.unslider({
         dots: true
     },$('.index_focusone_module'));
+
+    $('.index_focusone_module .dots').css('margin-left',-$('.index_focusone_module .dots').width()/2)
 
     //限时免费
 	var limitedfree = new limitedFreeModule.view({template:indexLimitedTemplate,el:"#limitedFree" ,dataUrl:'/media/api.go?action=freeforlimited&columnType=rec_limited_free&channelType=all&start=0&end=7'});

@@ -8,6 +8,10 @@ local ngx_ERR = ngx.ERR
 @in_line encode字符是否串缩进成一行
 ]]
 local function encode(obj, in_line)
+	if obj == nil then
+		ngx_log(ngx_ERR, "json encode with param is empty!")
+		return nil
+	end
 	local type = type(obj)
 	if type ~= "table" then
 		ngx_log(ngx_ERR, "json encode with param is not be table data struct!")
@@ -23,6 +27,10 @@ end
 
 
 local function decode(str)
+	if str == nil or str == "" then
+		ngx_log(ngx_ERR, "json decode with param is empty!")
+		return nil
+	end
 	local type = type(str)
 	if type ~= "string" then
 		ngx_log(ngx_ERR, "json decode with param is not be string data struct!")

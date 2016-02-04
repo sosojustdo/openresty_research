@@ -248,6 +248,30 @@ ddbase.getUserName = function(){
     }
     return username;
 }
+ddbase.getCustId=function(){
+    // 由于退出登录清除不了custId的cookie，为了防止多账号登陆出现的MDD_custId不能更新的问题，特改为每次刷新页面都重新请求custId
+    // var custId= decodeURIComponent(ddbase.getCookie("MDD_custId"));
+    // if (!custId || custId==''||custId==null){
+    if(ddbase.token() && ddbase.token()!=null){
+        $.ajax({
+            method:'GET',
+            url:'/media/api2.go?action=getUser&selfType=0&pubId=5&rewardIcon='+ddbase.setBaseApiParams(),
+            async:false,
+            success:function(response){
+                if(parseInt(response.status.code) == 0){
+                    var userInfo = response.data.userInfo;
+                    // ddbase.setCookie('MDD_custId',userInfo.pubCustId,8760);
+                    custId = decodeURIComponent(userInfo.pubCustId);
+                }
+            }
+        })
+    // }
+        return custId;
+    }else{
+        return false;
+    }
+        
+}
 //设置公共参数
 ddbase.setBaseApiParams = function(){
             var channelId = ddbase.getQueryString('channelId');
@@ -2339,27 +2363,35 @@ define('productBooklistModule',["jquery","underscore","backbone","ddbase","dealP
     return bookList;
 });
 define('productBarTemplate',["jquery","underscore","backbone"],function ($,_,Backbone) {
-	var productBarTemplate = '<div class="pic">'+
-	    '<img src="<%=data.get("barImgUrl")%>" alt="">'+
-	    '</div>'+
-	    '<div class="desc">'+
-	    '<% var link = "bar_detail_page.html?barId="+data.get("barId")%>'+
-	    	 '<h1 class="title"><a href="<%=link%>"><%=data.get("barName")%></a></h1>'+
-	    	  '<div class="content"><a href="<%=link%>"><%=data.get("barDesc")%></a></div>'+
-	    '</div>'+
-	    '<div class="fans clearfix">'+
-	    	'<div class="fans_num">'+
-	    		'<i class="icon icon_size_50"></i>'+
-	    		'<p class="num">粉丝<%=data.get("memberNum")%></p>'+
-	    	'</div>'+
-	    	'<a class="bar_write_btn margin_top_20" href="javascript:;" memberStatus=<%=data.get("memberStatus")%> barId=<%=data.get("barId")%> >发帖</a>'+
-	    '</div>'+
-	    '<div class="masks" id="mask"></div>'+
-		'<div class="pop_enter_wrap" id="enterBar">'+
-			'<div class="opacity_border"></div>'+
-			'<div class="pop_enter">'+
-				'<img src="img/pop_enter_bar.jpg" alt="">'+
-				'<p class="pop_btn_line"><a href="javascript:;" class="no pop_btn" status="0">取消</a><a href="javascript:;" class="yes pop_btn" status="1" barId=<%=data.get("barId")%>>加入</a></p>'+
+	var productBarTemplate = '<div class="header">'+
+			'<p><%=data.get("barName")%>书吧</p>'+
+			'<div class="bar"></div>'+
+		'</div>'+
+		'<div class="inner clearfix">'+
+			'<div class="pic">'+
+		    	'<div class="pic_wrap"><img src="<%=data.get("barImgUrl")%>" alt=""></div>'+
+		    	'<div class="name">吧主</div>'+
+		    '</div>'+
+		    '<div class="desc">'+
+		    '<% var link = "bar_detail_page.html?barId="+data.get("barId")%>'+
+		    	 '<h1 class="title"><a href="<%=link%>"><%=data.get("barName")%></a></h1>'+
+		    	  '<div class="content"><a href="<%=link%>"><%=data.get("barDesc")%></a></div>'+
+		    '</div>'+
+		    '<div class="fans clearfix">'+
+		    	'<div class="fans_num">'+
+		    		'<i class="icon icon_size_50"></i>'+
+		    		'<p class="num">粉丝<%=data.get("memberNum")%></p>'+
+		    	'</div>'+
+		    	'<a class="bar_write_btn" href="javascript:;" memberStatus=<%=data.get("memberStatus")%> barId=<%=data.get("barId")%> >发帖</a>'+
+		    	'<a class="read_more_post" href="bar_detail_page.html?barId=<%=data.get("barId")%>" target="_blank">查看全部帖子</a>'+
+		    '</div>'+
+		    '<div class="masks" id="mask"></div>'+
+			'<div class="pop_enter_wrap" id="enterBar">'+
+				'<div class="opacity_border"></div>'+
+				'<div class="pop_enter">'+
+					'<img src="img/pop_enter_bar.jpg" alt="">'+
+					'<p class="pop_btn_line"><a href="javascript:;" class="no pop_btn" status="0">取消</a><a href="javascript:;" class="yes pop_btn" status="1" barId=<%=data.get("barId")%>>加入</a></p>'+
+				'</div>'+
 			'</div>'+
 		'</div>'
 	    return productBarTemplate;
@@ -2816,7 +2848,7 @@ define('productBookInfoTemplate',[],function () {
 define('productBookDetailTemplate',[],function () {
 	 var productBookDetailTemplate = '<div class="bookcover"><img onerror="this.src=\'img/book_def_180_260.png\'"src="<%=data.get("coverPic")%>"></div>'+
 	'<div class="bookinfor">'+
-		'<div class="title"><%=data.get("title")%></div>'+
+		'<div class="title"><%=data.get("title")%><span class="icon">电子书</span></div>'+
 		'<div class="star"><span class="starlevel">'+
 			'<%var score = ddbase.dealStar(data.get("score"));%>'+
 			'<%if(score!=5){%>'+
@@ -2848,7 +2880,7 @@ define('productBookDetailTemplate',[],function () {
 			'<%}else{%>'+
 				'<%if(data.get("mediaType") == 2){%>'+
 					'<%priceStr = "¥"+(data.get("price")/100).toFixed(2);bellStr=data.get("price");%>'+
-					'<%if(data.get("paperMediaPrice")&& priceStr != "免费"){%>'+
+					'<%if(data.get("paperMediaPrice")){%>'+
 						'<%paperpriceStr = "¥"+(data.get("paperMediaPrice")/100).toFixed(2);%>'+
 						'<%var discountNum = ((data.get("price")/data.get("paperMediaPrice"))*10).toFixed(1);%>'+ 
 							'<%if(discountNum<1){%>'+
@@ -2884,23 +2916,23 @@ define('productBookDetailTemplate',[],function () {
 					'<%if(borrowEndTime == undefined){%>'+
 						'<a href="javascript:;" class="btn" status="borrow" dur =<%=duration%> id="borrowBtn" dd_name="免费借阅">免费借阅(<%=durDay%>天)</a>'+
 						'<a href="javascript:;" class="btn_orange" status="buy" id="buy_now_button" deviceTypeCodes="<%=data.get("deviceTypeCodes")%>" dd_name="购买">购买</a>'+
-						'<a href="##" class="shopping_car addShopCartBtn" id="addShopCartBtn" dd_name="加入购物车"><i class="icon"></i>加入购物车</a>'+
+						'<a href="##" class="shopping_car addShopCartBtn btn_basic" id="addShopCartBtn" dd_name="加入购物车">加入购物车</a>'+
 					'<%}else{%>'+
 						'<%if((new Date(borrowEndTime)).getTime() - (new Date()).getTime() > 0){%>'+
 							'<a href="<%=link%>" class="btn" status="readNow" target="_blank" id="readNowBtn" dd_name="立即阅读">立即阅读</a>'+
 						'<%}else{%>'+
 							'<a href="javascript:;" class="btn" status="reborrow" id="reborrowBtn" dd_name="续借" >续借</a>'+
 							'<a href="javascript:;" class="btn_orange" status="buy" id="buy_now_button" deviceTypeCodes="<%=data.get("deviceTypeCodes")%>" dd_name="购买">购买</a>'+
-							'<a href="##" class="shopping_car addShopCartBtn" id="addShopCartBtn" dd_name="加入购物车"><i class="icon"></i>加入购物车</a>'+
+							'<a href="##" class="shopping_car addShopCartBtn btn_basic" id="addShopCartBtn" dd_name="加入购物车">加入购物车</a>'+
 						'<%}%>'+
 					'<%}%>'+
 				'<%}else{%>'+
 					'<%if(data.get("isWholeAuthority") == 1 ){%>'+           
-						'<a href="<%link%>" class="btn" status="readNow" target="_blank" id="readNowBtn" dd_name="立即阅读">立即阅读</a>'+
+						'<a href="<%=link%>" class="btn" status="readNow" target="_blank" id="readNowBtn" dd_name="立即阅读">立即阅读</a>'+
 					'<%}else{%>'+
 						'<a href="<%=link%>" class="btn" status="try" target="_blank" id="tryBtn" dd_name="试读">试读</a>'+
 						'<a href="javascript:;" class="btn_orange" status="buy" id="buy_now_button" deviceTypeCodes="<%=data.get("deviceTypeCodes")%>" dd_name="购买">购买</a>'+
-						'<a href="##" class="shopping_car addShopCartBtn"><i class="icon" id="addShopCartBtn" dd_name="加入购物车"></i>加入购物车</a>'+
+						'<a href="##" class="shopping_car addShopCartBtn btn_basic" id="addShopCartBtn" dd_name="加入购物车">加入购物车</a>'+
 					'<%}%>'+
 				'<%}%>'+
 			'<%}%>'+
@@ -3308,6 +3340,7 @@ define('hotChannelTemplate',[],function(){
 	var hotChannelTemplate =
 	'<%if(data.length>0){%>'+
 		'<div class="product_rectitle_module">热门频道</div>'+
+		'<div style="margin-left:10px;">'+
 		 '<%data.each(function(item){%>'+
 			'<div class="hot_channel_list">'+
 				'<a href="channeldetail_page.html?cId=<%=item.get("channelId")%>" target="_blank">'+
@@ -3320,6 +3353,7 @@ define('hotChannelTemplate',[],function(){
 				'</a>'+
 			'</div>	'+
 		'<%})%>'+
+		'</div>'+
 	'<%}%>'
 	
 	return hotChannelTemplate;
@@ -3363,7 +3397,7 @@ define('productBreadCrumbTemplate',[],function () {
 
 	return breadCrumbTemplate;
 });
-require(["jquery","productBookDetail","alsoLookTemplate","productBooklistModule","productBarTemplate","productBarpostsTemplate","productBar","productAlsoBuyTemplate","productBookInfoTemplate","productBookCatelogTemplate","productBookDetailTemplate","publicMethod","hotChannel","hotChannelTemplate","recommendTopTemplate","productBreadCrumbTemplate"],function($,productBookDetail,alsoLookTemplate,bookList,productBarTemplate,productBarpostsTemplate,bar,productAlsoBuyTemplate,productBookInfoTemplate,productBookCatelogTemplate,productBookDetailTemplate,publicMethod,hotChannel,hotChannelTemplate,recommendTopTemplate,breadCrumbTemplate){
+require(["jquery","productBookDetail","alsoLookTemplate","productBooklistModule","productBarTemplate","productBarpostsTemplate","productBar","productAlsoBuyTemplate","productBookInfoTemplate","productBookCatelogTemplate","productBookDetailTemplate","publicMethod","hotChannel","hotChannelTemplate","recommendTopTemplate","productBreadCrumbTemplate","underscore","ddbase"],function($,productBookDetail,alsoLookTemplate,bookList,productBarTemplate,productBarpostsTemplate,bar,productAlsoBuyTemplate,productBookInfoTemplate,productBookCatelogTemplate,productBookDetailTemplate,publicMethod,hotChannel,hotChannelTemplate,recommendTopTemplate,breadCrumbTemplate,_,ddbase){
 	
     publicMethod.init();
 	// 图书信息
@@ -3382,6 +3416,10 @@ require(["jquery","productBookDetail","alsoLookTemplate","productBooklistModule"
 
 	//书吧
 	var barView = new bar.view({el:"#barModule",barEl:"#bar",postsEl:"#barposts",dataUrl:"/media/api.go?action=queryArticleListV2",barTemplate:productBarTemplate,postsTemplate:productBarpostsTemplate})
+
+	// 支持设备类型
+	var deviceTemplate=_.template($("#product_device").html())
+	$('.product_device_wrap').html(deviceTemplate({ddbase:ddbase}));
 });
 define("product", function(){});
 

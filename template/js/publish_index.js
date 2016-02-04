@@ -248,6 +248,30 @@ ddbase.getUserName = function(){
     }
     return username;
 }
+ddbase.getCustId=function(){
+    // 由于退出登录清除不了custId的cookie，为了防止多账号登陆出现的MDD_custId不能更新的问题，特改为每次刷新页面都重新请求custId
+    // var custId= decodeURIComponent(ddbase.getCookie("MDD_custId"));
+    // if (!custId || custId==''||custId==null){
+    if(ddbase.token() && ddbase.token()!=null){
+        $.ajax({
+            method:'GET',
+            url:'/media/api2.go?action=getUser&selfType=0&pubId=5&rewardIcon='+ddbase.setBaseApiParams(),
+            async:false,
+            success:function(response){
+                if(parseInt(response.status.code) == 0){
+                    var userInfo = response.data.userInfo;
+                    // ddbase.setCookie('MDD_custId',userInfo.pubCustId,8760);
+                    custId = decodeURIComponent(userInfo.pubCustId);
+                }
+            }
+        })
+    // }
+        return custId;
+    }else{
+        return false;
+    }
+        
+}
 //设置公共参数
 ddbase.setBaseApiParams = function(){
             var channelId = ddbase.getQueryString('channelId');
@@ -1328,7 +1352,8 @@ define('publicMethod',["jquery","publicHeaderNav","publicHeaderChildnavModule","
     return publicMethod;
 });
 define('publishLimitedTemplate',["jquery","underscore","backbone",'ddbase'],function ($,_,Backbone,ddbase) {
-    var publishLimitedTemplate = '<div class="index_subnav_module">'+
+    var publishLimitedTemplate = '<% if(data.length>0){%>'+
+    '<div class="index_subnav_module">'+
         '<ul class="nav clearfix">'+
             '<li class="first on">'+
                 '<a href="morelist_page.html?columnType=pub_limited_free&title=今日限时" target="_blank">今日限时</a>'+
@@ -1377,7 +1402,8 @@ define('publishLimitedTemplate',["jquery","underscore","backbone",'ddbase'],func
                 
             '<%}%>'+
        '<%})%>'+
-    '</div>'
+    '</div>'+
+'<%}%>'
     return publishLimitedTemplate;
 });
 require(['ddbase','publish_carousel_module','lazyloadForHover',"publicTabModule","publicSideCodeModule","limitedFreeModule","add_more","publicMethod","dealPrice","publishLimitedTemplate","lazyload"], function (ddbase,carousel,lazyloadForHover,publicTabModule,publicSideCodeModule,limitedFreeModule,addMore,publicMethod,dealPrice,publishLimitedTemplate,lazyload) {

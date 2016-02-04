@@ -772,6 +772,30 @@ ddbase.getUserName = function(){
     }
     return username;
 }
+ddbase.getCustId=function(){
+    // 由于退出登录清除不了custId的cookie，为了防止多账号登陆出现的MDD_custId不能更新的问题，特改为每次刷新页面都重新请求custId
+    // var custId= decodeURIComponent(ddbase.getCookie("MDD_custId"));
+    // if (!custId || custId==''||custId==null){
+    if(ddbase.token() && ddbase.token()!=null){
+        $.ajax({
+            method:'GET',
+            url:'/media/api2.go?action=getUser&selfType=0&pubId=5&rewardIcon='+ddbase.setBaseApiParams(),
+            async:false,
+            success:function(response){
+                if(parseInt(response.status.code) == 0){
+                    var userInfo = response.data.userInfo;
+                    // ddbase.setCookie('MDD_custId',userInfo.pubCustId,8760);
+                    custId = decodeURIComponent(userInfo.pubCustId);
+                }
+            }
+        })
+    // }
+        return custId;
+    }else{
+        return false;
+    }
+        
+}
 //设置公共参数
 ddbase.setBaseApiParams = function(){
             var channelId = ddbase.getQueryString('channelId');
@@ -1488,7 +1512,10 @@ require(['jquery',"indexFocusone","publicTabModule","publicSideCodeModule","lazy
     originWomanPic.timer =setTimeout(function(){
         window.originWomanPic.stop();
     },0)
-     
+    
+    $('.focus_pic_man .dots').css('margin-left',-$('.focus_pic_man .dots').width()/2);
+    $('.focus_pic_woman .dots').css('margin-left',-$('.focus_pic_woman .dots').width()/2);
+
     
 	//分类
 	publicTabModule.slideTab($('.index_subnav_module'),'only_one','click',$('.index_story .content'));
