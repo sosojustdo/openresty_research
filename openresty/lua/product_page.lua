@@ -260,7 +260,7 @@ if res6.status == ngx.HTTP_OK then
 
 	if http_status ~= 0 then
 		local error_message = article_obj.status.message
-		ngx_log(ngx_ERR, "getBuyAlsoBuy interface http code:"..http_status.." message:"..error_message)
+		ngx_log(ngx_ERR, "queryArticleListV2 interface http code:"..http_status.." message:"..error_message)
 		article_obj = nil
 	end
 	model_tab["article_model"] = article_obj

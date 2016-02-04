@@ -60,7 +60,14 @@
 									<span class="starlevel_inner"></span>
 								{% end %}							
 							</span>
-							<i class="num" id="postNum">({{article_model.data.barInfo.articleNum}}人评论)</i>
+							<i class="num" id="postNum">
+							{% local barInfo = article_model.data.barInfo 
+								if barInfo ~= nil then %}   
+								({{article_model.data.barInfo.articleNum}}人评论)
+								{% else %}
+								(0人评论)
+								{% end %}
+							</i>
 						</div>
 						
 						<ul class="publish_infor">
@@ -170,109 +177,232 @@
 						</ul>
 						<div class="bar"></div>
 					</div>
-					{% local desStr = media_model.data.mediaSale.mediaList[1].descs %}
-					
+					{%	
+						local desStr = media_model.data.mediaSale.mediaList[1].descs 
+						local desc_finl_str = string.gsub(desStr, "%s+", "") %}
+						<div class="content bookDes"><div class="bookDes_inner">&nbsp;&nbsp;&nbsp;&nbsp;{{desc_finl_str}}</div></div>
+						<!-- 图书章节内容 -->
+						<div class="content catalog_box" id="catalogBox" style="display:none;">
+							{%	local media_catalog = publish_content_model.data.contents
+								if type(media_catalog) == "table" and media_catalog ~= nil then %}
+								<ul class="catalog_ul">
+									{% for k, v in pairs(media_catalog) do %}
+										<li class="catalog_li">
+											<h3 class="catalog_h3">{{v["name"]}}</h3>
+											<div class="catalog_div">{{v["content"]}}</div>
+										</li>
+									{% end %}							
+								</ul>
+								{% else %}
+									<div class="no_catalog">此书没有目录，精彩内容尽在阅读中</div>
+								{% end %}
+						</div>
+						<div class="content more" style="display:none;">
+							<p><b>出版社：</b>{{media_model.data.mediaSale.mediaList[1].publisher}}</p>
+							<p><b>出版时间：</b>{{os.date("%Y-%m-%d", media_model.data.mediaSale.mediaList[1].publishDate/1000)}}</p>
+							<p><b>ISBN：</b>{{media_model.data.mediaSale.mediaList[1].isbn}}</p>
+							{% local wordCount = media_model.data.mediaSale.mediaList[1].wordCnt 
+								if  wordCount > 10000 then
+									wordCount = string.format("%.1f", wordCount/10000).."万"
+								end %}
+							<p><b>字数：</b>{{wordCount}}</p>
+							<p><b>大小：</b>{{string.format("%.1f", (media_model.data.mediaSale.mediaList[1].fileSize/1048576))}}M</p>							
+						</div>
 				</div>
 				
 				
 				<!-- 买了还买 -->
 				<div class="product_alsobuy_module" dd_name="买了还买">
-					<!-- <div class="product_rectitle_module">买过这本书的人还买过</div> -->
 					<div class="clearfix" id="bookAlsoBuy">
-						<!-- <div class="product_alsobuycell_module">
-	<a href="">
-		<div class="bookcover">
-			<img src="images/1.png" alt="">
-		</div>
-		<p class="title">把每一天当做梦般</p>
-		<p class="price"><span class="now">¥18.00</span>|<span class="ori">¥18.00</span></p>
-	</a>
-</div> -->
-					</div>
-					
+						<div class="product_rectitle_module">买过这本书的人还买过</div>
+						{% if buy_also_buy_model ~= nil and 
+							buy_also_buy_model.data.mediaList ~= nil and 
+							type(buy_also_buy_model.data.mediaList) == "table" then 
+							for k, v in pairs(buy_also_buy_model.data.mediaList) do %}
+								<div class="product_alsobuycell_module">
+									{%  local mediaType = v["mediaType"] 
+										local coverPic = v["coverPic"]
+										local title = v["title"]
+										local link
+										if mediaType == 1 then
+											link = "http://k.dangdang.com/staging/original_single_page.html?id="..v["saleId"].."&mediaId="..v["mediaId"].."&mediaType=1"
+										elseif mediaType == 2 then
+											link = "http://k.dangdang.com/staging/product_page.html?id="..v["saleId"].."&mediaId="..v["mediaId"].."&mediaType=2"
+										end %}
+										<div class="bookcover"><a href="{{link}}" target="_blank"><img onerror = "javascript:nofind(this,\'img/book_def_74_105.png\');" src="{{coverPic}}" /></a></div>
+										<p class="title"><a href="{{link}}" target="_blank" title="{{title}}">{{title}}</a></p>
+										<p class="price">
+											<!-- TODO price -->
+										</p>										
+								</div>							
+							{% end 					
+						end %}
+					</div>					
 				</div>
 				
-				<!--  书吧 -->
+				<!-- 书吧开始 -->
 				<div class="product_bar_module" id="barModule" dd_name="书吧">
-					<div class="product_barcell_moudle clearfix" id="bar"></div>
-					<div id="barposts">
+					<!-- 吧相关信息 -->
+					<div class="product_barcell_moudle clearfix" id="bar">
+						<div class="header">
+							<p>{{article_model.data.barInfo.barName}}书吧</p>
+							<div class="bar"></div>
+						</div>
+						<div class="inner clearfix">
+							<div class="pic">
+								<div class="pic_wrap"><img src="{{article_model.data.barInfo.barImgUrl}}" alt=""></div>
+								<div class="name">吧主</div>
+							</div>
+							<div class="desc">
+								{% local link = "bar_detail_page.html?barId="..article_model.data.barInfo.barId %}
+								<h1 class="title"><a href="{{link}}">{{article_model.data.barInfo.barName}}</a></h1>
+								<div class="content"><a href="{{link}}">{{article_model.data.barInfo.barDesc}}</a></div>
+							</div>
+							<div class="fans clearfix">
+								<div class="fans_num">
+									<i class="icon icon_size_50"></i>
+									<p class="num">粉丝{{article_model.data.barInfo.memberNum}}</p>
+								</div>
+								<a class="bar_write_btn" href="javascript:;" memberStatus="{{article_model.data.barInfo.memberStatus}}" barId="{{article_model.data.barInfo.barId}}" >发帖</a>
+								<a class="read_more_post" href="bar_detail_page.html?barId={{article_model.data.barInfo.barId}}" target="_blank">查看全部帖子</a>								
+							</div>
+							<div class="masks" id="mask"></div>
+							<div class="pop_enter_wrap" id="enterBar">
+								<div class="opacity_border"></div>
+								<div class="pop_enter">
+									<img src="img/pop_enter_bar.jpg" alt="">
+									<p class="pop_btn_line"><a href="javascript:;" class="no pop_btn" status="0">取消</a><a href="javascript:;" class="yes pop_btn" status="1" barId="{{article_model.data.barInfo.barId}}" >加入</a></p>
+								</div>
+							</div>
+						</div>
 					</div>
-					<!-- <div class="product_barmore_module">
-	<a href="">去看更多帖子</a>
-</div> -->
-					
+					<!-- 吧评论 -->
+					<div id="barposts">
+						{%  local posts = article_model.data.articleList 
+							if posts ~= nil and type(posts) == "table" then 
+								for k, v in pairs(posts) do  
+									local barId = v["barId"] 
+									local digestId = v["mediaDigestId"] 
+									local link = "post_detail_page.html?barId="..barId.."&digestId="..digestId
+									local user = v["userBaseInfo"]								
+									if k < 4 then %}
+										<div class="product_barposts_module clearfix">
+											<div class="pic">
+												<img src="{{user.custImg}}" alt="">
+												<div class="name">{{user.nickName}}</div>
+												<div class="time">{{os.date("%Y-%m-%d", v["createDateLong"]/1000)}}</div>
+											</div>
+											<div class="desc">
+												<div class="post_con">
+													<h1 class="title"><a href="{{link}}" target="_blank">{{v["title"]}}</a></h1>
+													<div class="content">
+														<div class="brief"> <a href="{{link}}" class="left" target="_blank">{{v["content"]}}</a></div>		
+													</div>
+													{% if v["imgList"] ~= nil and v["imgList"] ~= "" then %}
+														<ul class="pic_list clearfix">
+															{% for key, val in pairs(v["imgList"]) do 
+																if (key < 3) then %}
+																	<li><a href="{{link}}" target="_blank"><img src="{{val}}" alt=""></a></li>												
+																{% end
+															end %}
+														</ul>
+													{% end %}																					
+												</div>
+												<div class="community clearfix">
+													<a href="javascript:;" class="favor" data-praise="false" digestId="{{digestId}}" >
+														<i class="icon icon_size_20"></i>
+														<em class="praise_num">{{v["praiseNum"]}}</em>
+													</a>
+													<a href="{{link}}" target="_blank" class="comment">
+														<i class="icon icon_size_20"></i>
+														<em>{{v["commentNum"]}}</em>
+													</a>
+												</div>
+											</div>											
+										</div>
+									{% end %}
+									{% if k == 3 then %}
+										<div class="product_barmore_module"><a href="bar_detail_page.html?barId={{barId}}" target="_blank">去看更多帖子</a></div>									
+									{% end
+								end
+							end %}						
+					</div>				
 				</div>
+				<!-- 书吧结束 -->
 				
 			</div>
 			<!-- 左侧结束 -->
 			
-			
-			
-			
-			
+				
+			<!-- 右侧开始 -->
 			<div class="product_content_right">
 				<!-- 强力推荐 -->
 				<div class="product_rec_wrapper"  dd_name="强力推荐">
-					 <!-- <div class="product_rectitle_module">强力推荐</div> -->
-					 <div id="recommend"></div>
-					
+					<div id="recommend">
+						<div class="product_rectitle_module">强力推荐</div>
+						
+						
+						
+					</div>
 				</div>
+				
 				<!-- 移动阅读设备 -->
 				<div class="product_device_module">
-	<h3>移动阅读设备</h3>
-	<ul class="clearfix">
-		<li class="device_01">
-			<a href="">
-				<em  class="icon_line"><i class="icon icon_size_40"></i></em>
-				<em class="words">PC在线</em>
-			</a>
-		</li>
-		<li class="device_02">
-			<a href="">
-				<em  class="icon_line"><i class="icon icon_size_40"></i></em>
-				<em class="words">PC下载</em>
-			</a>
-		</li>
-		<li class="device_03">
-			<a href="">
-				<em  class="icon_line"><i class="icon icon_size_40"></i></em>
-				<em class="words">ipad</em>
-			</a>
-		</li>
-		<li class="device_04">
-			<a href="">
-				<em class="icon_line"><i class="icon icon_size_40"></i></em>
-				<em class="words">iphone</em>
-			</a>
-		</li>
-		<li class="device_05">
-			<a href="">
-				<em  class="icon_line"><i class="icon icon_size_40"></i></em>
-				<em class="words">Andriod</em>
-			</a>
-		</li>
-		<li class="device_06">
-			<a href="">
-				<em  class="icon_line"><i class="icon icon_size_40"></i></em>
-				<em class="words">阅读器</em>
-			</a>
-		</li>
-		<li class="device_07">
-			<a href="">
-				<em  class="icon_line"><i class="icon icon_size_40"></i></em>
-				<em class="words">触屏版</em>
-			</a>
-		</li>
-		<li class="device_08">
-			<a href="">
-				<em  class="icon_line"><i class="icon icon_size_40"></i></em>
-				<em class="words">都看阅读器触屏版</em>
-			</a>
-		</li>
-		<li class="device_09">
-		</li>
-	</ul>
-</div>
+					<h3>移动阅读设备</h3>
+					<ul class="clearfix">
+						<li class="device_01">
+							<a href="">
+								<em  class="icon_line"><i class="icon icon_size_40"></i></em>
+								<em class="words">PC在线</em>
+							</a>
+						</li>
+						<li class="device_02">
+							<a href="">
+								<em  class="icon_line"><i class="icon icon_size_40"></i></em>
+								<em class="words">PC下载</em>
+							</a>
+						</li>
+						<li class="device_03">
+							<a href="">
+								<em  class="icon_line"><i class="icon icon_size_40"></i></em>
+								<em class="words">ipad</em>
+							</a>
+						</li>
+						<li class="device_04">
+							<a href="">
+								<em class="icon_line"><i class="icon icon_size_40"></i></em>
+								<em class="words">iphone</em>
+							</a>
+						</li>
+						<li class="device_05">
+							<a href="">
+								<em  class="icon_line"><i class="icon icon_size_40"></i></em>
+								<em class="words">Andriod</em>
+							</a>
+						</li>
+						<li class="device_06">
+							<a href="">
+								<em  class="icon_line"><i class="icon icon_size_40"></i></em>
+								<em class="words">阅读器</em>
+							</a>
+						</li>
+						<li class="device_07">
+							<a href="">
+								<em  class="icon_line"><i class="icon icon_size_40"></i></em>
+								<em class="words">触屏版</em>
+							</a>
+						</li>
+						<li class="device_08">
+							<a href="">
+								<em  class="icon_line"><i class="icon icon_size_40"></i></em>
+								<em class="words">都看阅读器触屏版</em>
+							</a>
+						</li>
+						<li class="device_09">
+						</li>
+					</ul>
+				</div>
+				
 				<!-- 大家都在看 -->
 				<div class="product_rec_wrapper" dd_name="大家都在看">
 					 <!-- <div class="product_rectitle_module">大家都在看</div> -->
@@ -296,11 +426,9 @@
 				 <div id="hotChannel"></div>
 				</div>
 			</div>
+			<!-- 右侧结束 -->
 		</div>	
 	</div>
-	
-
-	
 	
 	{(foot.html)}
 	
