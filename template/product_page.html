@@ -155,8 +155,23 @@
 									{% end %}			
 								{% end %}									
 							{% end %}
-							<span class="collectSpan clearfix" id="collectC" data-isStore="{{media_model.data.mediaSale.mediaList[1].isStore}}"" dd_name="收藏"></span>
-							<span class="shareSpan"><div id="ShareC" dd_name="分享"></div></span>
+							<span class="collectSpan clearfix" id="collectC" data-isStore="{{media_model.data.mediaSale.mediaList[1].isStore}}"" dd_name="收藏">
+								<div class="collection" data-isstore="{{media_model.data.mediaSale.mediaList[1].isStore}}">
+									<i class="icon collect"></i>
+									<span class="text">
+										{% if media_model.data.mediaSale.mediaList[1].isStore == 0 then %}
+											收藏
+										{% else %}
+											取消收藏
+										{% end %}
+									</span>
+								</div>
+							</span>
+							<span class="shareSpan">
+								<div id="ShareC" dd_name="分享">
+									<div class="shareC"><i class="icon share"></i>分享<div class="sharelist clearfix hide" style="display: none;"><i class="weibo icon clicked" data-type="sina"></i><i class="weixin icon" data-type="weixin"><div class="weixinC hide" style="display: none;"></div></i><i class="qq icon clicked" data-type="qzone"></i></div></div>
+								</div>			
+							</span>
 							<a href="javascript:;" class="phone" dd_name="在手机上阅读">
 								<span class="phone_inner"><i class="icon"></i>在手机上阅读</span>
 								<div class="ecode"><span class="arrow"></span><img src="img/ecode.png" alt=""></div>
