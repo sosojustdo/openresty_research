@@ -253,12 +253,12 @@
 				
 				<!-- 买了还买 -->
 				<div class="product_alsobuy_module" dd_name="买了还买">
-					<div class="clearfix" id="bookAlsoBuy">
-						<div class="product_rectitle_module">买过这本书的人还买过</div>
+					<div class="clearfix" id="bookAlsoBuy">						
 						{% if buy_also_buy_model ~= nil and 
 							buy_also_buy_model.data.mediaList ~= nil and 
-							type(buy_also_buy_model.data.mediaList) == "table" then 
-							for k, v in pairs(buy_also_buy_model.data.mediaList) do %}
+							type(buy_also_buy_model.data.mediaList) == "table" then %}
+							<div class="product_rectitle_module">买过这本书的人还买过</div>
+						{%	for k, v in pairs(buy_also_buy_model.data.mediaList) do %}
 								<div class="product_alsobuycell_module">
 									{%  local mediaType = v["mediaType"] 
 										local coverPic = string.gsub(v["coverPic"], "_aa_cover", "_cc_cover")
@@ -383,12 +383,12 @@
 			<div class="product_content_right">
 				<!-- 强力推荐 -->
 				<div class="product_rec_wrapper"  dd_name="强力推荐">
-					<div id="recommend">
-						<div class="product_rectitle_module">强力推荐</div>
+					<div id="recommend">					
 						{% if media_category_sale_top_model ~= nil then 
 							local saleList = media_category_sale_top_model.data.saleList
-							if saleList ~= nil then
-								for k, v in pairs(saleList) do
+							if saleList ~= nil then %}
+							<div class="product_rectitle_module">强力推荐</div>
+							{%	for k, v in pairs(saleList) do
 									local mediaList = v["mediaList"][1] %}
 									<div class="product_reccell_module clearfix">
 										{% local link
@@ -484,12 +484,12 @@
 			
 				<!-- 大家都在看 -->
 				<div class="product_rec_wrapper" dd_name="大家都在看">
-					<div id="bookAlsoLook">
-						<div class="product_rectitle_module">大家还在看</div>
+					<div id="bookAlsoLook">						
 						{%  if view_also_view_model ~= nil then 
 							local mediaList = view_also_view_model.data.mediaList
-								if mediaList ~= nil then
-									for k, v in pairs(mediaList) do %}
+								if mediaList ~= nil then %}
+								<div class="product_rectitle_module">大家还在看</div>
+								{%	for k, v in pairs(mediaList) do %}
 										<div class="product_reccell_module clearfix">
 										{% local link
 											local mediaType = v["mediaType"]
@@ -519,16 +519,15 @@
 						%}					
 					</div>					 
 				</div>
-				
-				
+								
 				<!-- 热门频道 -->
-				<div class="publish_hot_channel" dd_name="热门频道">
-					<div class="product_rectitle_module">热门频道</div>
+				<div class="publish_hot_channel" dd_name="热门频道">					
 					<div style="margin-left:10px;">
 						{%  if hot_channel_model ~= nil then 
 							local channelList = hot_channel_model.data.channelList
-								if channelList ~= nil then
-									for k, v in pairs(channelList) do %}
+								if channelList ~= nil then %}
+								<div class="product_rectitle_module">热门频道</div>
+								{%	for k, v in pairs(channelList) do %}
 										<div class="hot_channel_list">	
 											<a href="channeldetail_page.html?cId={{v["channelId"]}}" target="_blank">
 												<img src="{{v["icon"]}}" alt="">
