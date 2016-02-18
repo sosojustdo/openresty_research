@@ -9,16 +9,22 @@
 </head>
 <body>
 	{% 
-		local price_model = require "price"		
-		local media = media_model
+		local price_model = require "price"
 		
-		if media ~= nil then
+		if media_model ~= nil then
 			local shelf_status = media_model.data.mediaSale.mediaList[1].shelfStatus
 			-- media shelf status is 0, so redirect to 404.html
 			if shelf_status == 0 then
 				ngx.log(ngx.INFO, "product page error due to media shelf status is 0..................")
 				return ngx.redirect("http://k.dangdang.com", ngx.HTTP_MOVED_TEMPORARILY)
 			end
+			
+			-- media category exclude(hj(欢聚游戏点卡)、zt(字体)、yc(虚拟支付充值卡)、ls(乐视视频)) 
+			local category = media_model.data.mediaSale.mediaList[1].category
+			if category == "hj" or category == "zt" or category == "yc" or category == "ls" then
+				ngx.log(ngx.INFO, "product page error due to media category invalid, value is:"..category.."..................")
+				return ngx.redirect("http://k.dangdang.com", ngx.HTTP_MOVED_TEMPORARILY)
+			end	
 		else
 			--media is nil redirect to 404.html
 			ngx.log(ngx.INFO, "product page error due to media object is nil..................")
