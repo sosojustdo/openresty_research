@@ -18,7 +18,7 @@ local r_port = 6380
 local function get_w_redis()
 	local w_red = redis:new()
 
-	w_red:set_timeout(1000)
+	w_red:set_timeout(5000)
 
 	local ok, err = w_red:connect(w_ip, w_port)
 	if not ok then
