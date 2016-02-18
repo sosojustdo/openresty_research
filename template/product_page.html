@@ -8,7 +8,25 @@
 	<link type="text/css" rel="stylesheet" href="css/product_page.min.css">
 </head>
 <body>
-	{% local price_model = require "price" %}
+	{% 
+		local price_model = require "price"		
+		local media = media_model
+		
+		if media ~= nil then
+			local shelf_status = media_model.data.mediaSale.mediaList[1].shelfStatus
+			-- media shelf status is 0, so redirect to 404.html
+			if shelf_status == 0 then
+				ngx.log(ngx.INFO, "product page error due to media shelf status is 0..................")
+				return ngx.redirect("http://k.dangdang.com", ngx.HTTP_MOVED_TEMPORARILY)
+			end
+		else
+			--media is nil redirect to 404.html
+			ngx.log(ngx.INFO, "product page error due to media object is nil..................")
+			return ngx.redirect("http://k.dangdang.com", ngx.HTTP_MOVED_TEMPORARILY)
+		end	
+		
+		local media_info = media_model.data.mediaSale.mediaList[1]
+	%}
 	{(head.html)}
 	<!-- 导航开始 -->
 	<div class="public_headernav_module padding_top_30" dd_name="头部导航">
@@ -31,8 +49,8 @@
 			 <!-- 面包屑开始 -->
 			 <div class="navigation_module" id="crumb" dd_name="面包屑">
 				<a href="index_page.html">当当读书</a>
-				<a href="classification_list_page.html?category={{media_model.data.mediaSale.mediaList[1].categoryIds}}&dimension=dd_sale">{{media_model.data.mediaSale.mediaList[1].categorys}}</a>
-				<a class="focus">{{media_model.data.mediaSale.mediaList[1].title}}</a>
+				<a href="classification_list_page.html?category={{media_info.categoryIds}}&dimension=dd_sale">{{media_info.categorys}}</a>
+				<a class="focus">{{media_info.title}}</a>
 			 </div>
 			 <!-- 面包屑结束 -->
 			 
@@ -42,18 +60,18 @@
 				<div class="product_bookdetail_module clearfix" id="productBookDetail" dd_name="书本信息">
 					<!-- 封面 -->
 					<div class="bookcover">
-						<img onerror="this.src='img/book_def_180_260.png'" src="{{media_model.data.mediaSale.mediaList[1].coverPic}}" />
+						<img onerror="this.src='img/book_def_180_260.png'" src="{{media_info.coverPic}}" />
 					</div>
 					
 					<div class="bookinfor">
 						<div class="title">
-							{{media_model.data.mediaSale.mediaList[1].title}}
+							{{media_info.title}}
 							<span class="icon">电子书</span>
 						</div>
 						
 						<div class="star">
 							<span class="starlevel">
-								{% local score = media_model.data.mediaSale.mediaList[1].score 
+								{% local score = media_info.score 
 									if score ~= 5 then
 									local classname = "starlevel_inner_"..score %}
 									<span class="starlevel_inner {{classname}}"></span>
@@ -72,28 +90,28 @@
 						</div>
 						
 						<ul class="publish_infor">
-							<li>作&nbsp; 者 ：{{media_model.data.mediaSale.mediaList[1].authorPenname}}</li>
-							{% local wordCount = media_model.data.mediaSale.mediaList[1].wordCnt 
+							<li>作&nbsp; 者 ：{{media_info.authorPenname}}</li>
+							{% local wordCount = media_info.wordCnt 
 								if  wordCount > 10000 then
 									wordCount = string.format("%.1f", wordCount/10000).."万"
 								end %}
 							<li>字&nbsp; 数 ：{{wordCount}}</li>
-							<li>出版社：&nbsp;{{media_model.data.mediaSale.mediaList[1].publisher}}</li>
+							<li>出版社：&nbsp;{{media_info.publisher}}</li>
 						</ul>
 						
 						<div class="price_line">
 							{% 
 								local priceStr, bellStr, paperpriceStr, discountStr = "", "", "", ""
-								local paperMediaPrice = media_model.data.mediaSale.mediaList[1].paperMediaPrice
-								local price = media_model.data.mediaSale.mediaList[1].price
-								if media_model.data.mediaSale.mediaList[1].freeBook == 1 then
+								local paperMediaPrice = media_info.paperMediaPrice
+								local price = media_info.price
+								if media_info.freeBook == 1 then
 									priceStr = "免费"
 									bellStr= "免费"
 									if paperMediaPrice then
 										paperpriceStr = "¥"..string.format("%.2f", (paperMediaPrice/100))
 									end
 								else
-									if media_model.data.mediaSale.mediaList[1].mediaType == 2 then
+									if media_info.mediaType == 2 then
 										bellStr = price
 										priceStr = "¥"..string.format("%.2f", (price/100))
 										if paperMediaPrice then
@@ -120,46 +138,46 @@
 						</div>
 											
 						<div class="btn_line">
-							{% local link = "http://e.dangdang.com/pc/reader/index.html?id="..media_model.data.mediaSale.mediaList[1].mediaId %}
-							{% if media_model.data.mediaSale.mediaList[1].freeBook == 1 then 
-								if media_model.data.mediaSale.mediaList[1].isWholeAuthority == 1 then %}
+							{% local link = "http://e.dangdang.com/pc/reader/index.html?id="..media_info.mediaId %}
+							{% if media_info.freeBook == 1 then 
+								if media_info.isWholeAuthority == 1 then %}
 									<a href="{{link}}" class="btn" status="readNow" target="_blank" id="readNow" dd_name="立即阅读">立即阅读</a>
 								{% else %}
 									<a href="javascript:;" class="btn" status="free" id="freeGet" dd_name="免费获取">免费获取</a>
 								{% end %}
 							{% else 
-								local borrowEndTime = media_model.data.mediaSale.mediaList[1].borrowEndTime
-								if media_model.data.mediaSale.mediaList[1].canBorrow == 1 then
-									local duration = media_model.data.mediaSale.mediaList[1].borrowDuration
+								local borrowEndTime = media_info.borrowEndTime
+								if media_info.canBorrow == 1 then
+									local duration = media_info.borrowDuration
 									local durDay = duration/1000/60/60/24
 									if borrowEndTime == nil or borrowEndTime == "" then %}
 										<a href="javascript:;" class="btn" status="borrow" dur ="{{duration}}" id="borrowBtn" dd_name="免费借阅">免费借阅({{durDay}}天)</a>
-										<a href="javascript:;" class="btn_orange" status="buy" id="buy_now_button" deviceTypeCodes="{{media_model.data.mediaSale.mediaList[1].deviceTypeCodes}}" dd_name="购买">购买</a>
+										<a href="javascript:;" class="btn_orange" status="buy" id="buy_now_button" deviceTypeCodes="{{media_info.deviceTypeCodes}}" dd_name="购买">购买</a>
 										<a href="##" class="shopping_car addShopCartBtn btn_basic" id="addShopCartBtn" dd_name="加入购物车">加入购物车</a>
 									{% else 
 										if ( borrowEndTime - (ngx.now * 1000)) > 0 then %}	
 											<a href="{{link}}" class="btn" status="readNow" target="_blank" id="readNowBtn" dd_name="立即阅读">立即阅读</a>
 										{% else %}
 											<a href="javascript:;" class="btn" status="reborrow" id="reborrowBtn" dd_name="续借" >续借</a>
-											<a href="javascript:;" class="btn_orange" status="buy" id="buy_now_button" deviceTypeCodes="{{media_model.data.mediaSale.mediaList[1].deviceTypeCodes}}" dd_name="购买">购买</a>
+											<a href="javascript:;" class="btn_orange" status="buy" id="buy_now_button" deviceTypeCodes="{{media_info.deviceTypeCodes}}" dd_name="购买">购买</a>
 											<a href="##" class="shopping_car addShopCartBtn btn_basic" id="addShopCartBtn" dd_name="加入购物车">加入购物车</a>
 										{% end %}							
 									{% end %}								
 								{% else
-									if media_model.data.mediaSale.mediaList[1].isWholeAuthority == 1 then %}
+									if media_info.isWholeAuthority == 1 then %}
 										<a href="{{link}}" class="btn" status="readNow" target="_blank" id="readNowBtn" dd_name="立即阅读">立即阅读</a>									
 									{% else %}
 										<a href="{{link}}" class="btn" status="try" target="_blank" id="tryBtn" dd_name="试读">试读</a>
-										<a href="javascript:;" class="btn_orange" status="buy" id="buy_now_button" deviceTypeCodes="{{media_model.data.mediaSale.mediaList[1].deviceTypeCodes}}" dd_name="购买">购买</a>
+										<a href="javascript:;" class="btn_orange" status="buy" id="buy_now_button" deviceTypeCodes="{{media_info.deviceTypeCodes}}" dd_name="购买">购买</a>
 										<a href="##" class="shopping_car addShopCartBtn btn_basic" id="addShopCartBtn" dd_name="加入购物车">加入购物车</a>
 									{% end %}			
 								{% end %}									
 							{% end %}
-							<span class="collectSpan clearfix" id="collectC" data-isStore="{{media_model.data.mediaSale.mediaList[1].isStore}}"" dd_name="收藏">
-								<div class="collection" data-isstore="{{media_model.data.mediaSale.mediaList[1].isStore}}">
+							<span class="collectSpan clearfix" id="collectC" data-isStore="{{media_info.isStore}}"" dd_name="收藏">
+								<div class="collection" data-isstore="{{media_info.isStore}}">
 									<i class="icon collect"></i>
 									<span class="text">
-										{% if media_model.data.mediaSale.mediaList[1].isStore == 0 then %}
+										{% if media_info.isStore == 0 then %}
 											收藏
 										{% else %}
 											取消收藏
@@ -178,8 +196,8 @@
 							</a>						
 						</div>
 					</div>
-					<input id="productId" type="hidden" value="{{media_model.data.mediaSale.mediaList[1].mediaId}}" />
-					<input id="saleId" type="hidden" value="{{media_model.data.mediaSale.mediaList[1].saleId}}" />
+					<input id="productId" type="hidden" value="{{media_info.mediaId}}" />
+					<input id="saleId" type="hidden" value="{{media_info.saleId}}" />
 				</div>
 				<!-- 书本信息结束 -->
 				
@@ -194,7 +212,7 @@
 						<div class="bar"></div>
 					</div>
 					{%	
-						local desStr = media_model.data.mediaSale.mediaList[1].descs 
+						local desStr = media_info.descs 
 						local desc_finl_str = string.gsub(desStr, "%s+", "") %}
 						<div class="content bookDes"><div class="bookDes_inner">&nbsp;&nbsp;&nbsp;&nbsp;{{desc_finl_str}}</div></div>
 						<!-- 图书章节内容 -->
@@ -214,15 +232,15 @@
 								{% end %}
 						</div>
 						<div class="content more" style="display:none;">
-							<p><b>出版社：</b>{{media_model.data.mediaSale.mediaList[1].publisher}}</p>
-							<p><b>出版时间：</b>{{os.date("%Y-%m-%d", media_model.data.mediaSale.mediaList[1].publishDate/1000)}}</p>
-							<p><b>ISBN：</b>{{media_model.data.mediaSale.mediaList[1].isbn}}</p>
-							{% local wordCount = media_model.data.mediaSale.mediaList[1].wordCnt 
+							<p><b>出版社：</b>{{media_info.publisher}}</p>
+							<p><b>出版时间：</b>{{os.date("%Y-%m-%d", media_info.publishDate/1000)}}</p>
+							<p><b>ISBN：</b>{{media_info.isbn}}</p>
+							{% local wordCount = media_info.wordCnt 
 								if  wordCount > 10000 then
 									wordCount = string.format("%.1f", wordCount/10000).."万"
 								end %}
 							<p><b>字数：</b>{{wordCount}}</p>
-							<p><b>大小：</b>{{string.format("%.1f", (media_model.data.mediaSale.mediaList[1].fileSize/1048576))}}M</p>							
+							<p><b>大小：</b>{{string.format("%.1f", (media_info.fileSize/1048576))}}M</p>							
 						</div>
 				</div>
 				
@@ -400,7 +418,7 @@
 					<div class="product_device_module">
 						<h3>移动阅读设备</h3>
 						<ul class="clearfix">
-						{% 	local reder_link = "http://e.dangdang.com/pc/reader/index.html?id="..media_model.data.mediaSale.mediaList[1].saleId %}
+						{% 	local reder_link = "http://e.dangdang.com/pc/reader/index.html?id="..media_info.saleId %}
 							<li class="device_01">
 								<a href="{{reder_link}}" target="_blank">
 									<em  class="icon_line"><i class="icon icon_size_40"></i></em>

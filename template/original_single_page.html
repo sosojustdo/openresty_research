@@ -5,9 +5,27 @@
 	<title>原创单品页</title>
 	<link type="text/css" rel="stylesheet" href="http://static.dangdang.com/css/win_login20150728.css?20150817">
 	<link type="text/css" rel="stylesheet" href="css/common.min.css">
-	<link type="text/css" rel="stylesheet" href="css/product_page.min.css">
+	<link type="text/css" rel="stylesheet" href="css/original_single_page.min.css">
 </head>
 <body>
+	{% 
+		local price_model = require "price"
+		
+		if media_model ~= nil then
+			local shelf_status = media_model.data.mediaSale.mediaList[1].shelfStatus
+			-- media shelf status is 0, so redirect to 404.html
+			if shelf_status == 0 then
+				ngx.log(ngx.INFO, "product page error due to media shelf status is 0..................")
+				return ngx.redirect("http://k.dangdang.com", ngx.HTTP_MOVED_TEMPORARILY)
+			end
+		else
+			--media is nil redirect to 404.html
+			ngx.log(ngx.INFO, "product page error due to media object is nil..................")
+			return ngx.redirect("http://k.dangdang.com", ngx.HTTP_MOVED_TEMPORARILY)
+		end
+
+		local media_info = media_model.data.mediaSale.mediaList[1]
+	%}
 	{(head.html)}
 	<!-- 导航开始 -->
 	<div class="public_headernav_module padding_top_30" dd_name="头部导航">
@@ -25,6 +43,42 @@
 	</div>
 	<!-- 导航结束 -->
 	
+	<!-- 中间内容开始 -->
+	<div class="bgcolor">
+		<div class="center"> 
+			<!-- 面包屑开始 -->
+			<div class="navigation_module" id="crumb" dd_name="面包屑">
+				<a href="index_page.html">当当读书</a>
+				<a href="classification_list_page.html?category={{media_model.data.mediaSale.mediaList[1].categoryIds}}&dimension=dd_sale&order=0">{{media_info.categorys}}</a>
+				<a class="focus">{{media_info.title}}</a>
+			</div>
+			<!-- 面包屑结束 -->
+	
+			<div class="main original_single clearfix">
+				<!-- 左侧开始 -->
+				<div class="left">
+					<!-- 单品开始 -->
+					<div id="content">
+						<div class="content clearfix">
+							<div class="image"><img src="{{media_info.coverPic}}"></div>
+						
+					
+						</div>
+					</div>
+					<!-- 单品结束 -->
+					
+				</div>
+				<!-- 左侧结束 -->
+				
+				<!-- 右侧开始 -->
+				<div class="right">
+				
+				</div>
+				<!-- 右侧结束 -->	
+			</div>	
+		</div>
+	</div>
+	<!-- 中间内容结束 -->
 	
 	{(foot.html)}
 	
