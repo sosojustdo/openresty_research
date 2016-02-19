@@ -35,7 +35,7 @@ end
 local function get_r_redis()
 	local r_red = redis:new()
 
-	r_red:set_timeout(1000)
+	r_red:set_timeout(5000)
 
 	local ok, err = r_red:connect(r_ip, r_port)
 	if not ok then
