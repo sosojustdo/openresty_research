@@ -1,4 +1,5 @@
 local common = require "common"
+--[[
 local redis = require "redis_common"
 local json = require "json_common"
 
@@ -37,6 +38,13 @@ if queryArticleListV2_value == '' then
 else
 	redis.close_redis(r_red)
 end
+]]
+
+local args = ngx.req.get_uri_args()
+common.read_http(args)
+
+local common_tab = common.common_tab
+local queryArticleListV2_value = common_tab["http_body"]
 
 ngx.say(queryArticleListV2_value)
 
