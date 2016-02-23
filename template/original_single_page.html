@@ -16,12 +16,12 @@
 			-- media shelf status is 0, so redirect to 404.html
 			if shelf_status == 0 then
 				ngx.log(ngx.INFO, "product page error due to media shelf status is 0..................")
-				return ngx.redirect("http://k.dangdang.com", ngx.HTTP_MOVED_TEMPORARILY)
+				return ngx.redirect("/error_page.html", ngx.HTTP_MOVED_TEMPORARILY)
 			end
 		else
 			--media is nil redirect to 404.html
 			ngx.log(ngx.INFO, "product page error due to media object is nil..................")
-			return ngx.redirect("http://k.dangdang.com", ngx.HTTP_MOVED_TEMPORARILY)
+			return ngx.redirect("/error_page.html", ngx.HTTP_MOVED_TEMPORARILY)
 		end
 
 		local media_info = media_model.data.mediaSale.mediaList[1]
@@ -317,7 +317,7 @@
 												elseif mediaType == 2 then
 													link = "http://k.dangdang.com/staging/product_page.html?id="..mediaList["saleId"].."&mediaId="..mediaList["mediaId"].."&mediaType=2"
 												end	%}
-											<div class="bookcover"><a href="{{link}}" target="_blank"><img onerror = "javascript:nofind(this,\'img/book_def_74_105.png\');" src="{{coverPic}}" /></a></div>
+											<div class="bookcover"><a href="{{link}}" target="_blank"><img src="{{coverPic}}" /></a></div>
 											<div class="bookinfo">
 												<div class="title"><a href="{{link}}" target="_blank"  title="{{mediaList["title"]}}">{{mediaList["title"]}}</a></div>
 												<div class="author">{{mediaList["authorPenname"]}}</div>
@@ -356,7 +356,7 @@
 										elseif mediaType == 2 then
 											link = "http://k.dangdang.com/staging/product_page.html?id="..v["saleId"].."&mediaId="..v["mediaId"].."&mediaType=2"
 										end %}
-										<div class="bookcover"><a href="{{link}}" target="_blank"><img onerror = "javascript:nofind(this,\'img/book_def_74_105.png\');" src="{{coverPic}}" /></a></div>
+										<div class="bookcover"><a href="{{link}}" target="_blank"><img src="{{coverPic}}" /></a></div>
 										<div class="bookinfo">
 											<div class="title"><a href="{{link}}" target="_blank" title="{{title}}">{{title}}</a></div>
 											<div class="author">{{v["authorPenname"]}}</div>
@@ -439,7 +439,7 @@
 	<script type="text/javascript">
         var require = {urlArgs: "v=1453881061684"}
     </script>
-	<script type="text/javascript" src="lib/require.min.js" data-main="js/original_single"></script>
+	<script type="text/javascript" src="lib/require.min.js" data-main="js/original_single_"></script>
 	<script>
 		require.config({
 　　　　　　baseUrl: "js/",

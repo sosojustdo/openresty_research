@@ -11,7 +11,7 @@ local args = ngx.req.get_uri_args()
 --校验请求参数
 local flag = common.check_params(args)
 if not flag then
-	return ngx.redirect("http://k.dangdang.com", ngx.HTTP_MOVED_TEMPORARILY)
+	return ngx.redirect("/error_page.html", ngx.HTTP_MOVED_TEMPORARILY)
 end
 
 --登录token
@@ -244,7 +244,7 @@ else
 end
 
 --render html
-template.render("original_single_page.html", model_tab)
+template.render("original_single_page_.html", model_tab)
 
 
 

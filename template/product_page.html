@@ -16,19 +16,19 @@
 			-- media shelf status is 0, so redirect to 404.html
 			if shelf_status == 0 then
 				ngx.log(ngx.INFO, "product page error due to media shelf status is 0..................")
-				return ngx.redirect("http://k.dangdang.com", ngx.HTTP_MOVED_TEMPORARILY)
+				return ngx.redirect("/error_page.html", ngx.HTTP_MOVED_TEMPORARILY)
 			end
 			
 			-- media category exclude(hj(欢聚游戏点卡)、zt(字体)、yc(虚拟支付充值卡)、ls(乐视视频)) 
 			local category = media_model.data.mediaSale.mediaList[1].category
 			if category == "hj" or category == "zt" or category == "yc" or category == "ls" then
 				ngx.log(ngx.INFO, "product page error due to media category invalid, value is:"..category.."..................")
-				return ngx.redirect("http://k.dangdang.com", ngx.HTTP_MOVED_TEMPORARILY)
+				return ngx.redirect("/error_page.html", ngx.HTTP_MOVED_TEMPORARILY)
 			end	
 		else
 			--media is nil redirect to 404.html
 			ngx.log(ngx.INFO, "product page error due to media object is nil..................")
-			return ngx.redirect("http://k.dangdang.com", ngx.HTTP_MOVED_TEMPORARILY)
+			return ngx.redirect("/error_page.html", ngx.HTTP_MOVED_TEMPORARILY)
 		end	
 		
 		local media_info = media_model.data.mediaSale.mediaList[1]
@@ -606,7 +606,7 @@
 	<script type="text/javascript">
         var require = {urlArgs: "v=1453881061684"}
     </script>
-	<script type="text/javascript" src="lib/require.min.js" data-main="js/product"></script>
+	<script type="text/javascript" src="lib/require.min.js" data-main="js/product_"></script>
 	<script>
 		require.config({
 　　　　　　baseUrl: "js/",
