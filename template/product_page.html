@@ -10,6 +10,7 @@
 <body>
 	{% 
 		local price_model = require "price"
+		local common = require "common"
 		
 		if media_model ~= nil then
 			local shelf_status = media_model.data.mediaSale.mediaList[1].shelfStatus
@@ -54,8 +55,12 @@
 		<div class="product_content clearfix">
 			 <!-- 面包屑开始 -->
 			 <div class="navigation_module" id="crumb" dd_name="面包屑">
-				<a href="index_page.html">当当读书</a>
-				<a href="classification_list_page.html?category={{media_info.categoryIds}}&dimension=dd_sale">{{media_info.categorys}}</a>
+				<a href="index_page.html">当当读书</a>				 
+				{%	local categoryIds = media_info.categoryIds
+					local split_result = common.lua_string_split(categoryIds, ",")
+					if split_result ~= nil then %}
+				<a href="classification_list_page.html?category={{split_result[1]}}&dimension=dd_sale">{{media_info.categorys}}</a>
+				{% end %}			
 				<a class="focus">{{media_info.title}}</a>
 			 </div>
 			 <!-- 面包屑结束 -->
@@ -85,10 +90,10 @@
 									<span class="starlevel_inner"></span>
 								{% end %}							
 							</span>
-							<i class="num" id="postNum">
-							{% local barInfo = article_model.data.barInfo 
-								if barInfo ~= nil then %}   
-								({{article_model.data.barInfo.articleNum}}人评论)
+							<i class="num" id="postNum">							
+							{% local commentNumber = media_info.commentNumber 
+								if commentNumber ~= nil then %}
+								({{commentNumber}}人评论)
 								{% else %}
 								(0人评论)
 								{% end %}
@@ -173,7 +178,7 @@
 									if media_info.isWholeAuthority == 1 then %}
 										<a href="{{link}}" class="btn" status="readNow" target="_blank" id="readNowBtn" dd_name="立即阅读">立即阅读</a>									
 									{% else %}
-										<a href="{{link}}" class="btn" status="try" target="_blank" id="tryBtn" dd_name="试读">试读</a>
+										<a href="{{link}}" class="btn_orange" status="try" target="_blank" id="tryBtn" dd_name="试读">试读</a>
 										<a href="javascript:;" class="btn_orange" status="buy" id="buy_now_button" deviceTypeCodes="{{media_info.deviceTypeCodes}}" dd_name="购买">购买</a>
 										<a href="##" class="shopping_car addShopCartBtn btn_basic" id="addShopCartBtn" dd_name="加入购物车">加入购物车</a>
 									{% end %}			

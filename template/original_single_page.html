@@ -10,6 +10,7 @@
 <body>
 	{% 
 		local price_model = require "price"
+		local common = require "common"
 		
 		if media_model ~= nil then
 			local shelf_status = media_model.data.mediaSale.mediaList[1].shelfStatus
@@ -49,7 +50,11 @@
 			<!-- 面包屑开始 -->
 			<div class="navigation_module" id="crumb" dd_name="面包屑">
 				<a href="index_page.html">当当读书</a>
-				<a href="classification_list_page.html?category={{media_model.data.mediaSale.mediaList[1].categoryIds}}&dimension=dd_sale&order=0">{{media_info.categorys}}</a>
+				{%	local categoryIds = media_info.categoryIds
+					local split_result = common.lua_string_split(categoryIds, ",")
+					if split_result ~= nil then %}
+				<a href="classification_list_page.html?category={{split_result[1]}}&dimension=dd_sale">{{media_info.categorys}}</a>
+				{% end %}
 				<a class="focus">{{media_info.title}}</a>
 			</div>
 			<!-- 面包屑结束 -->
@@ -71,9 +76,9 @@
 									{% for i=1, 5-score do %}
 										<i class="grey icon"></i>
 									{% end %}
-									{% local barInfo = article_model.data.barInfo 
-									if barInfo ~= nil then %}   
-									({{article_model.data.barInfo.articleNum}}人评论)
+									{% local commentNumber = media_info.commentNumber 
+									if commentNumber ~= nil then %}
+									({{commentNumber}}人评论)
 									{% else %}
 									(0人评论)
 									{% end %}
@@ -86,14 +91,14 @@
 									<tr>
 										{% local wordCount = media_info.wordCnt 
 										if  wordCount > 10000 then
-											wordCount = string.format("%.1f", wordCount/10000).."万"
+											wordCount = string.format("%.2f", wordCount/10000).."万"
 										end %}
 										<td>字数：{{wordCount}}</td>
 										{% local text = "" 
 											if media_info.isFull == 1 then
 												text = "完结"
 											elseif media_info.isFull == 0 then	
-												text = "更新至 第"..media_info.chapterCnt.."章"..media_info.lastChapterName
+												text = "更新至"..media_info.lastChapterName
 											end											
 										%}		
 										<td>状态：{{text}}</td>
