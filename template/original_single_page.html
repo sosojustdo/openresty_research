@@ -78,7 +78,7 @@
 									{% end %}
 									{% local commentNumber = media_info.commentNumber 
 									if commentNumber ~= nil then %}
-									({{commentNumber}}人评论)
+									({{commentNumber}}人评分)
 									{% else %}
 									(0人评论)
 									{% end %}
@@ -98,7 +98,9 @@
 											if media_info.isFull == 1 then
 												text = "完结"
 											elseif media_info.isFull == 0 then	
-												text = "更新至"..media_info.lastChapterName
+												if media_info.lastChapterName ~= nil then
+													text = "更新至"..media_info.lastChapterName
+												end								
 											end											
 										%}		
 										<td>状态：{{text}}</td>
@@ -193,39 +195,41 @@
 					<!-- 书吧开始 -->
 					<div class="product_bar_module" id="barModule" dd_name="书吧">
 						<!-- 吧相关信息 -->
-						<div class="product_barcell_moudle clearfix" id="bar">
-							<div class="header">
-								<p>{{article_model.data.barInfo.barName}}书吧</p>
-								<div class="bar"></div>
-							</div>
-							<div class="inner clearfix">
-								<div class="pic">
-									<div class="pic_wrap"><img src="{{article_model.data.barInfo.barImgUrl}}" alt=""></div>
-									<div class="name">吧主</div>
+						{% if article_model.data.barInfo ~= nil then %}
+							<div class="product_barcell_moudle clearfix" id="bar">
+								<div class="header">
+									<p>{{article_model.data.barInfo.barName}}书吧</p>
+									<div class="bar"></div>
 								</div>
-								<div class="desc">
-									{% local link = "bar_detail_page.html?barId="..article_model.data.barInfo.barId %}
-									<h1 class="title"><a href="{{link}}">{{article_model.data.barInfo.barName}}</a></h1>
-									<div class="content"><a href="{{link}}">{{article_model.data.barInfo.barDesc}}</a></div>
-								</div>
-								<div class="fans clearfix">
-									<div class="fans_num">
-										<i class="icon icon_size_50"></i>
-										<p class="num">粉丝{{article_model.data.barInfo.memberNum}}</p>
+								<div class="inner clearfix">
+									<div class="pic">
+										<div class="pic_wrap"><img src="{{article_model.data.barInfo.barImgUrl}}" alt=""></div>
+										<div class="name">吧主</div>
 									</div>
-									<a class="bar_write_btn" href="javascript:;" memberStatus="{{article_model.data.barInfo.memberStatus}}" barId="{{article_model.data.barInfo.barId}}" >发帖</a>
-									<a class="read_more_post" href="bar_detail_page.html?barId={{article_model.data.barInfo.barId}}" target="_blank">查看全部帖子</a>								
-								</div>
-								<div class="masks" id="mask"></div>
-								<div class="pop_enter_wrap" id="enterBar">
-									<div class="opacity_border"></div>
-									<div class="pop_enter">
-										<img src="img/pop_enter_bar.jpg" alt="">
-										<p class="pop_btn_line"><a href="javascript:;" class="no pop_btn" status="0">取消</a><a href="javascript:;" class="yes pop_btn" status="1" barId="{{article_model.data.barInfo.barId}}" >加入</a></p>
+									<div class="desc">
+										{% local link = "bar_detail_page.html?barId="..article_model.data.barInfo.barId %}
+										<h1 class="title"><a href="{{link}}">{{article_model.data.barInfo.barName}}</a></h1>
+										<div class="content"><a href="{{link}}">{{article_model.data.barInfo.barDesc}}</a></div>
+									</div>
+									<div class="fans clearfix">
+										<div class="fans_num">
+											<i class="icon icon_size_50"></i>
+											<p class="num">粉丝{{article_model.data.barInfo.memberNum}}</p>
+										</div>
+										<a class="bar_write_btn" href="javascript:;" memberStatus="{{article_model.data.barInfo.memberStatus}}" barId="{{article_model.data.barInfo.barId}}" >发帖</a>
+										<a class="read_more_post" href="bar_detail_page.html?barId={{article_model.data.barInfo.barId}}" target="_blank">查看全部帖子</a>								
+									</div>
+									<div class="masks" id="mask"></div>
+									<div class="pop_enter_wrap" id="enterBar">
+										<div class="opacity_border"></div>
+										<div class="pop_enter">
+											<img src="img/pop_enter_bar.jpg" alt="">
+											<p class="pop_btn_line"><a href="javascript:;" class="no pop_btn" status="0">取消</a><a href="javascript:;" class="yes pop_btn" status="1" barId="{{article_model.data.barInfo.barId}}" >加入</a></p>
+										</div>
 									</div>
 								</div>
-							</div>
-						</div>
+							</div>												
+						{% end %}						
 						<!-- 吧评论 -->
 						<div id="barposts">
 							{%  local posts = article_model.data.articleList 

@@ -76,7 +76,7 @@
 					
 					<div class="bookinfor">
 						<div class="title">
-							{{media_info.title}}
+							<span class="title_words">{{media_info.title}}</span>
 							<span class="icon">电子书</span>
 						</div>
 						
@@ -93,7 +93,7 @@
 							<i class="num" id="postNum">							
 							{% local commentNumber = media_info.commentNumber 
 								if commentNumber ~= nil then %}
-								({{commentNumber}}人评论)
+								({{commentNumber}}人评分)
 								{% else %}
 								(0人评论)
 								{% end %}
@@ -145,16 +145,19 @@
 							{% end %}		
 							{% if discountStr ~= "" then %}
 								<b>|</b><span class="red percent_off">{{discountStr}}</span>
-							{% end %}													
+							{% end %}
+							{% if media_info.paperMediaProductId ~= "" then %}
+								<a class="buy_paperbook" href="http://product.dangdang.com/{{media_info.paperMediaProductId}}.html" target="_blank">购买纸书</a>
+							{% end %}			
 						</div>
 											
 						<div class="btn_line">
 							{% local link = "http://e.dangdang.com/pc/reader/index.html?id="..media_info.mediaId %}
 							{% if media_info.freeBook == 1 then 
 								if media_info.isWholeAuthority == 1 then %}
-									<a href="{{link}}" class="btn" status="readNow" target="_blank" id="readNow" dd_name="立即阅读">立即阅读</a>
+									<a href="{{link}}" class="btn_orange" status="readNow" target="_blank" id="readNow" dd_name="立即阅读">立即阅读</a>
 								{% else %}
-									<a href="javascript:;" class="btn" status="free" id="freeGet" dd_name="免费获取">免费获取</a>
+									<a href="javascript:;" class="btn_orange" status="free" id="freeGet" dd_name="免费获取">免费获取</a>
 								{% end %}
 							{% else 
 								local borrowEndTime = media_info.borrowEndTime
@@ -162,21 +165,21 @@
 									local duration = media_info.borrowDuration
 									local durDay = duration/1000/60/60/24
 									if borrowEndTime == nil or borrowEndTime == "" then %}
-										<a href="javascript:;" class="btn" status="borrow" dur ="{{duration}}" id="borrowBtn" dd_name="免费借阅">免费借阅({{durDay}}天)</a>
+										<a href="javascript:;" class="btn_orange" status="borrow" dur ="{{duration}}" id="borrowBtn" dd_name="免费借阅">免费借阅({{durDay}}天)</a>
 										<a href="javascript:;" class="btn_orange" status="buy" id="buy_now_button" deviceTypeCodes="{{media_info.deviceTypeCodes}}" dd_name="购买">购买</a>
 										<a href="##" class="shopping_car addShopCartBtn btn_basic" id="addShopCartBtn" dd_name="加入购物车">加入购物车</a>
 									{% else 
 										if ( borrowEndTime - (ngx.now * 1000)) > 0 then %}	
-											<a href="{{link}}" class="btn" status="readNow" target="_blank" id="readNowBtn" dd_name="立即阅读">立即阅读</a>
+											<a href="{{link}}" class="btn_orange" status="readNow" target="_blank" id="readNowBtn" dd_name="立即阅读">立即阅读</a>
 										{% else %}
-											<a href="javascript:;" class="btn" status="reborrow" id="reborrowBtn" dd_name="续借" >续借</a>
+											<a href="javascript:;" class="btn_orange" status="reborrow" id="reborrowBtn" dd_name="续借" >续借</a>
 											<a href="javascript:;" class="btn_orange" status="buy" id="buy_now_button" deviceTypeCodes="{{media_info.deviceTypeCodes}}" dd_name="购买">购买</a>
 											<a href="##" class="shopping_car addShopCartBtn btn_basic" id="addShopCartBtn" dd_name="加入购物车">加入购物车</a>
 										{% end %}							
 									{% end %}								
 								{% else
 									if media_info.isWholeAuthority == 1 then %}
-										<a href="{{link}}" class="btn" status="readNow" target="_blank" id="readNowBtn" dd_name="立即阅读">立即阅读</a>									
+										<a href="{{link}}" class="btn_orange" status="readNow" target="_blank" id="readNowBtn" dd_name="立即阅读">立即阅读</a>									
 									{% else %}
 										<a href="{{link}}" class="btn_orange" status="try" target="_blank" id="tryBtn" dd_name="试读">试读</a>
 										<a href="javascript:;" class="btn_orange" status="buy" id="buy_now_button" deviceTypeCodes="{{media_info.deviceTypeCodes}}" dd_name="购买">购买</a>
@@ -585,7 +588,7 @@
 				<div class="item">
 					<div class="label">内容:</div>
 					<div class="content" id="postContent">
-						<iframe frameborder="0" id="ueditorIframe" name="ueditorIframe" width="700" height="530" src="/article/uePC.go"></iframe>
+						<iframe frameborder="0" id="ueditorIframe" name="ueditorIframe" width="700" height="350" src="/article/uePC.go"></iframe>
 					</div>
 				</div>
 				<button class="submitbtn">发布</button>
