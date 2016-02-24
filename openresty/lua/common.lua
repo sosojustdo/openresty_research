@@ -151,11 +151,23 @@ local function lua_string_split(str, split_char)
     return sub_str_tab;
 end
 
+--sub string
+local function sub_utf8_string(s, n)
+  local dropping = string.byte(s, n+1)
+  if not dropping then return s end
+  if dropping >= 128 and dropping < 192 then
+    return sub_utf8_string(s, n-1)
+  end
+  return string.sub(s, 1, n)
+end
+
+
 local _M = {
     read_http = read_http,
 	check_params = check_params,
 	getToken = getToken,
 	lua_string_split = lua_string_split,
+	sub_utf8_string = sub_utf8_string,
 	common_tab = common_tab
 }
 

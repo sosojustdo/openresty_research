@@ -107,7 +107,12 @@
 									</tr>
 								</table>
 								<div class="desc" title="{{media_info.descs}}">
-									{{media_info.descs}}															
+									{% 	local descs_length = string.len(media_info.descs) 
+										if descs_length > 350 then %}
+											{{common.sub_utf8_string(media_info.descs, 350).."..."}}
+									{% else %}
+										{{media_info.descs}}	
+									{% end %}																						
 								</div>
 								<div class="buttons">
 									{%  if media_info.isSupportFullBuy == 1 and media_info.isWholeAuthority == 0 then %}
