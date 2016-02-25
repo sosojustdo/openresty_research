@@ -42,6 +42,8 @@ https://github.com/pintsized/lua-resty-http</br>
 https://github.com/openresty/nginx-tutorials</br>
 OpenResty Best practice.pdf</br>
 
+http://dikar.iteye.com/blog/1477619</br>
+
 
 
 
