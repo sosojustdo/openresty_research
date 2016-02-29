@@ -1,13 +1,6 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>原创单品页</title>
-	<link type="text/css" rel="stylesheet" href="http://static.dangdang.com/css/win_login20150728.css?20150817">
-	<link type="text/css" rel="stylesheet" href="css/common.min.css">
-	<link type="text/css" rel="stylesheet" href="css/original_single_page.min.css">
-</head>
-<body>
 	{% 
 		local price_model = require "price"
 		local common = require "common"
@@ -27,6 +20,15 @@
 
 		local media_info = media_model.data.mediaSale.mediaList[1]
 	%}
+	<meta charset="UTF-8">
+	<title>{{media_info.title.."【简介_书评_在线阅读】-当当读书-当当图书"}}</title>
+	<meta name="keywords" content="{{media_info.title.." "..media_info.descs..","..media_info.publisher..","..media_info.isbn}}" />
+	<meta name="description" content="{{media_info.title.." "..media_info.descs}}" />
+	<link type="text/css" rel="stylesheet" href="http://static.dangdang.com/css/win_login20150728.css?20150817">
+	<link type="text/css" rel="stylesheet" href="css/common.min.css">
+	<link type="text/css" rel="stylesheet" href="css/original_single_page.min.css">
+</head>
+<body>	
 	{(head.html)}
 	<!-- 导航开始 -->
 	<div class="public_headernav_module padding_top_30" dd_name="头部导航">
