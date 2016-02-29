@@ -1,13 +1,28 @@
 local common = require "common"
 
---Éæ¼°µ½¹ºÂò£¬ÊÕ²ØÓëÓÃ»§×´Ì¬, Ö±½Óµ÷ÓÃhttp½Ó¿Ú
+--æ¶‰åŠåˆ°è´­ä¹°ï¼Œæ”¶è—ä¸ç”¨æˆ·çŠ¶æ€, ç›´æ¥è°ƒç”¨httpæ¥å£
 local args = ngx.req.get_uri_args()
+
 common.read_http(args)
 
 local common_tab = common.common_tab
 local getMedia_value = common_tab["http_body"]
 
 ngx.say(getMedia_value)
+
+
+--[[
+local v = common.share_dict_get("media:"..tostring(args["id"]))
+if v == nil then
+	common.read_http(args)
+	local common_tab = common.common_tab
+	v = common_tab["http_body"]
+	if v ~= nil then
+		common.share_dict_set("media:"..tostring(args["id"]), v)
+	end
+end
+ngx.say(v)
+]]
 
 
 

@@ -41,11 +41,26 @@ end
 ]]
 
 local args = ngx.req.get_uri_args()
+
 common.read_http(args)
 
 local common_tab = common.common_tab
 local queryArticleListV2_value = common_tab["http_body"]
 
 ngx.say(queryArticleListV2_value)
+
+
+--[[
+local v = common.share_dict_get("queryArticleListV2:"..tostring(args["id"]))
+if v == nil then
+	common.read_http(args)
+	local common_tab = common.common_tab
+	v = common_tab["http_body"]
+	if v ~= nil then
+		common.share_dict_set("queryArticleListV2:"..tostring(args["id"]), v)
+	end
+end
+ngx.say(v)
+]]
 
 

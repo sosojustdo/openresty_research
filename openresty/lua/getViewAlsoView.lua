@@ -42,11 +42,26 @@ end
 ]]
 
 local args = ngx.req.get_uri_args()
+
 common.read_http(args)
 
 local common_tab = common.common_tab
 local getViewAlsoView_value = common_tab["http_body"]
 
 ngx.say(getViewAlsoView_value)
+
+
+--[[
+local v = common.share_dict_get("ViewAlsoView:"..tostring(args["id"]))
+if v == nil then
+	common.read_http(args)
+	local common_tab = common.common_tab
+	v = common_tab["http_body"]
+	if v ~= nil then
+		common.share_dict_set("ViewAlsoView:"..tostring(args["id"]), v)
+	end
+end
+ngx.say(v)
+]]
 
 

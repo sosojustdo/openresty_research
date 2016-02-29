@@ -26,11 +26,23 @@
 		end	
 		
 		local media_info = media_model.data.mediaSale.mediaList[1]
+		local descs = ""
+		if media_info.descs ~= nil then
+			descs = media_info.descs
+		end
+		local publisher = ""
+		if media_info.publisher ~= nil then
+			publisher = media_info.publisher
+		end
+		local isbn = ""
+		if media_info.isbn ~= nil then
+			isbn = media_info.isbn
+		end
 	%}
 	<meta charset="UTF-8">
 	<title>{{media_info.title.."【简介_书评_在线阅读】-当当读书-当当图书"}}</title>
-	<meta name="keywords" content="{{media_info.title.." "..media_info.descs..","..media_info.publisher..","..media_info.isbn}}" />
-	<meta name="description" content="{{media_info.title.." "..media_info.descs}}" />
+	<meta name="keywords" content="{{media_info.title.." "..descs..","..publisher..","..isbn}}" />
+	<meta name="description" content="{{media_info.title.." "..descs}}" />
 	<link type="text/css" rel="stylesheet" href="http://static.dangdang.com/css/win_login20150728.css?20150817">
 	<link type="text/css" rel="stylesheet" href="css/common.min.css">
 	<link type="text/css" rel="stylesheet" href="css/product_page.min.css">

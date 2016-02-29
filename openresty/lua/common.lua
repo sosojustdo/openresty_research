@@ -6,6 +6,7 @@ local ngx_ERR = ngx.ERR
 local ngx_INFO = ngx.INFO
 local common_tab = {}
 local http_uri = "http://10.4.36.37"
+local config = ngx.shared.config
 
 
 
@@ -161,6 +162,28 @@ local function sub_utf8_string(s, n)
   return string.sub(s, 1, n)
 end
 
+-- share dict set
+local function share_dict_set(k, v)
+	if k == nil or v == nil or config == nil then
+		return false
+	end
+	if type(k) ~= "string" then
+		return false
+	end
+	config:set(k, v)
+end
+
+-- share dict get
+local function share_dict_get(k)
+	if k == nil or config == nil then
+		return false
+	end
+	if type(k) ~= "string" then
+		return false
+	end
+	return config:get(k)
+end
+
 
 local _M = {
     read_http = read_http,
@@ -168,6 +191,8 @@ local _M = {
 	getToken = getToken,
 	lua_string_split = lua_string_split,
 	sub_utf8_string = sub_utf8_string,
+	share_dict_set = share_dict_set,
+	share_dict_get = share_dict_get,
 	common_tab = common_tab
 }
 
