@@ -230,7 +230,6 @@ if res2.status == ngx.HTTP_OK then
 		if http_status ~= 0 then
 			local error_message = media_reward_record_obj.status.message
 			ngx_log(ngx_ERR, "getMediaRewardRecord interface http code:"..http_status.." message:"..error_message)
-			media_reward_record_obj = nil
 		end
 		model_tab["media_reward_record_model"] = media_reward_record_obj
 	end
@@ -246,7 +245,6 @@ if res3.status == ngx.HTTP_OK then
 		if http_status ~= 0 then
 			local error_message = media_buy_author_exceptthis_obj.status.message
 			ngx_log(ngx_ERR, "getMediasByAuthorExceptThis interface http code:"..http_status.." message:"..error_message)
-			media_buy_author_exceptthis_obj = nil
 		end
 		model_tab["media_buy_author_exceptthis_model"] = media_buy_author_exceptthis_obj
 	end
@@ -262,7 +260,6 @@ if res4.status == ngx.HTTP_OK then
 		if http_status ~= 0 then
 			local error_message = media_category_sale_top_obj.status.message
 			ngx_log(ngx_ERR, "getMediaCategorySaleTopn interface http code:"..http_status.." message:"..error_message)
-			media_category_sale_top_obj = nil
 		end
 		model_tab["media_category_sale_top_model"] = media_category_sale_top_obj
 	end
@@ -278,7 +275,6 @@ if res5.status == ngx.HTTP_OK then
 		if http_status ~= 0 then
 			local error_message = buy_also_buy_obj.status.message
 			ngx_log(ngx_ERR, "getBuyAlsoBuy interface http code:"..http_status.." message:"..error_message)
-			buy_also_buy_obj = nil
 		end
 		model_tab["buy_also_buy_model"] = buy_also_buy_obj
 	end
@@ -294,7 +290,6 @@ if res6.status == ngx.HTTP_OK then
 		if http_status ~= 0 then
 			local error_message = article_obj.status.message
 			ngx_log(ngx_ERR, "queryArticleListV2 interface http code:"..http_status.." message:"..error_message)
-			article_obj = nil
 		end
 		model_tab["article_model"] = article_obj
 	end
@@ -309,7 +304,6 @@ if res7.status == ngx.HTTP_OK then
 		if http_status ~= 0 then
 			local error_message = original_chapter_obj.status.message
 			ngx_log(ngx_ERR, "getAllChapterByMediaId interface http code:"..http_status.." message:"..error_message)
-			original_chapter_obj = nil
 		end
 		model_tab["original_chapter_model"] = original_chapter_obj
 	end
@@ -324,7 +318,6 @@ if res8.status == ngx.HTTP_OK then
 		if http_status ~= 0 then
 			local error_message = hot_channel_obj.status.message
 			ngx_log(ngx_ERR, "hotChannel interface http code:"..http_status.." message:"..error_message)
-			hot_channel_obj = nil
 		end
 		model_tab["hot_channel_model"] = hot_channel_obj
 	end
@@ -339,7 +332,6 @@ if res9.status == ngx.HTTP_OK then
 		if http_status ~= 0 then
 			local error_message = view_also_view_obj.status.message
 			ngx_log(ngx_ERR, "getViewAlsoView interface http code:"..http_status.." message:"..error_message)
-			view_also_view_obj = nil
 		end
 		model_tab["view_also_view_model"] = view_also_view_obj
 	end
@@ -348,7 +340,15 @@ else
 end
 
 --render original_single_page_.html
-template.render("original_single_page_v.html", model_tab)
+local function render_original_single_page()
+	return template.render("original_single_page_v.html", model_tab)
+end
+local ok, err = pcall(render_original_single_page)
+	if not ok then
+		ngx_log(ngx_ERR, "original_single_page_v.html render error:"..err)
+		return ngx.redirect("/error_page.html")
+	end
+
 
 elseif media_type == 2 then --product_page.html
 
@@ -481,8 +481,7 @@ if res2.status == ngx.HTTP_OK then
 		local http_status = media_category_sale_top_obj.status.code
 		if http_status ~= 0 then
 			local error_message = media_category_sale_top_obj.status.message
-			ngx_log(ngx_ERR, "getMediaCategorySaleTopn interface http code:"..http_status.." message:"..error_message)
-			media_category_sale_top_obj = nil
+			ngx_log(ngx_ERR, "getMediaCategorySaleTopn interface http code:"..http_status.." message:"..error_message)			
 		end
 		model_tab["media_category_sale_top_model"] = media_category_sale_top_obj
 	end
@@ -498,7 +497,6 @@ if res3.status == ngx.HTTP_OK then
 		if http_status ~= 0 then
 			local error_message = view_also_view_obj.status.message
 			ngx_log(ngx_ERR, "getViewAlsoView interface http code:"..http_status.." message:"..error_message)
-			view_also_view_obj = nil
 		end
 		model_tab["view_also_view_model"] = view_also_view_obj
 	end
@@ -514,7 +512,6 @@ if res4.status == ngx.HTTP_OK then
 		if http_status ~= 0 then
 			local error_message = hot_channel_obj.status.message
 			ngx_log(ngx_ERR, "hotChannel interface http code:"..http_status.." message:"..error_message)
-			hot_channel_obj = nil
 		end
 		model_tab["hot_channel_model"] = hot_channel_obj
 	end
@@ -530,7 +527,6 @@ if res5.status == ngx.HTTP_OK then
 		if http_status ~= 0 then
 			local error_message = buy_also_buy_obj.status.message
 			ngx_log(ngx_ERR, "getBuyAlsoBuy interface http code:"..http_status.." message:"..error_message)
-			buy_also_buy_obj = nil
 		end
 		model_tab["buy_also_buy_model"] = buy_also_buy_obj
 	end
@@ -546,7 +542,6 @@ if res6.status == ngx.HTTP_OK then
 		if http_status ~= 0 then
 			local error_message = article_obj.status.message
 			ngx_log(ngx_ERR, "queryArticleListV2 interface http code:"..http_status.." message:"..error_message)
-			article_obj = nil
 		end
 		model_tab["article_model"] = article_obj
 	end
@@ -561,8 +556,7 @@ if res7.status == ngx.HTTP_OK then
 		local http_status = publish_content_obj.status.code
 		if http_status ~= 0 then
 			local error_message = publish_content_obj.status.message
-			ngx_log(ngx_ERR, "getPublishedContents interface http code:"..http_status.." message:"..error_message)
-			publish_content_obj = nil
+			ngx_log(ngx_ERR, "getPublishedContents interface http code:"..http_status.." message:"..error_message)			
 		end
 		model_tab["publish_content_model"] = publish_content_obj
 	end
@@ -571,7 +565,17 @@ else
 end
 
 --render product_page_.html
-template.render("product_page_v.html", model_tab)
+
+local function render_product()
+	return template.render("product_page_v.html", model_tab)
+end
+	
+
+local ok, err = pcall(render_product)
+	if not ok then
+		ngx_log(ngx_ERR, "product_page_v.html render error:"..err)
+		return ngx.redirect("/error_page.html")
+	end
 
 end
 
