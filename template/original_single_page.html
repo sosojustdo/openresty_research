@@ -47,11 +47,10 @@
 	    <div class="public_headernav_module">
 			<div class="nav">
 				<ul>
-					<li class="on"><a href="http://k.dangdang.com/staging/index_page.html">首页</a></li>
-					<li class="chubannav"><a href="http://k.dangdang.com/staging/publish_index_page.html">出版</a></li>
-					<li class="yuanchuangnav"><a href="http://k.dangdang.com/staging/original_index_page.html?originalSex=man">原创</a></li>
-					<li><a href="http://k.dangdang.com/staging/product_page.html?id=1900098227&mediaId=1900098227&mediaType=2#">众筹</a></li>
-					<li><a href="http://k.dangdang.com/staging/product_page.html?id=1900098227&mediaId=1900098227&mediaType=2#">手机看书</a></li>
+					<li class="on"><a href="./index_page.html" >首页</a></li>
+					<li class="chubannav"><a href="./publish_index_page.html">出版</a></li>
+					<li class="yuanchuangnav"><a href="./original_index_page.html">网络文学</a></li>
+					<li><a target="_blank" href="http://t.dangdang.com/20140107_5pz1">手机看书</a></li>
 				</ul>
 			</div>
 		</div>
@@ -212,6 +211,7 @@
 					<!-- 打赏结束 -->
 					
 					<!-- 书吧开始 -->
+					{% if article_model ~= nil then %}
 					<div class="product_bar_module" id="barModule" dd_name="书吧">
 						<!-- 吧相关信息 -->
 						{% if article_model.data.barInfo ~= nil then %}
@@ -301,6 +301,7 @@
 								end %}						
 						</div>				
 					</div>
+					{% end %}
 					<!-- 书吧结束 -->				
 				</div>
 				<!-- 左侧结束 -->
@@ -340,10 +341,8 @@
 											{% local link
 												local mediaType = mediaList["mediaType"]
 												local coverPic = string.gsub(mediaList["coverPic"], "_aa_cover","_cc_cover")
-												if mediaType == 1 then
-													link = "http://k.dangdang.com/staging/original_single_page.html?id="..mediaList["saleId"].."&mediaId="..mediaList["mediaId"].."&mediaType=1"
-												elseif mediaType == 2 then
-													link = "http://k.dangdang.com/staging/product_page.html?id="..mediaList["saleId"].."&mediaId="..mediaList["mediaId"].."&mediaType=2"
+												if mediaType == 1 or mediaType == 2 then
+													link = "./"..mediaList["saleId"]..".html"
 												end	%}
 											<div class="bookcover"><a href="{{link}}" target="_blank"><img src="{{coverPic}}" /></a></div>
 											<div class="bookinfo">
@@ -379,10 +378,8 @@
 										local coverPic = string.gsub(v["coverPic"], "_aa_cover", "_cc_cover")
 										local title = v["title"]
 										local link
-										if mediaType == 1 then
-											link = "http://k.dangdang.com/staging/original_single_page.html?id="..v["saleId"].."&mediaId="..v["mediaId"].."&mediaType=1"
-										elseif mediaType == 2 then
-											link = "http://k.dangdang.com/staging/product_page.html?id="..v["saleId"].."&mediaId="..v["mediaId"].."&mediaType=2"
+										if mediaType == 1 or mediaType == 2 then
+											link = "./"..v["saleId"]..".html"
 										end %}
 										<div class="bookcover"><a href="{{link}}" target="_blank"><img src="{{coverPic}}" /></a></div>
 										<div class="bookinfo">
@@ -407,6 +404,9 @@
 				<!-- 右侧结束 -->	
 			</div>	
 		</div>
+		<input id="original_title" type="hidden" value="{{media_info.title}}" />
+		<input id="original_desc" type="hidden" value="{{descs}}" />
+		<input id="original_coverPic" type="hidden" value="{{media_info.coverPic}}" />
 	</div>
 	<!-- 中间内容结束 -->
 	
@@ -467,10 +467,10 @@
 	<script type="text/javascript">
         var require = {urlArgs: "v=1453881061684"}
     </script>
-	<script type="text/javascript" src="lib/require.min.js" data-main="js/original_single_"></script>
+	<script type="text/javascript" src="../lib/require.min.js" data-main="../js/original_single_"></script>
 	<script>
 		require.config({
-　　　　　　baseUrl: "js/",
+　　　　　　baseUrl: "../js/",
 　　　　　　paths: {
 　　　　　　    "jquery": "../lib/jquery.min",
                 "underscore": "../lib/underscore.min",

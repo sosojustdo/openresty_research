@@ -46,20 +46,20 @@ local args = ngx.req.get_uri_args()
 common.read_http(args)
 
 local common_tab = common.common_tab
-local getMediaCategorySaleTopn_value = common_tab["http_body"]
+local getAllChapterByMediaId_value = common_tab["http_body"]
 
-ngx.say(getMediaCategorySaleTopn_value)
+ngx.say(getAllChapterByMediaId_value)
 ]]
 
 
 local args = ngx.req.get_uri_args()
-local v = common.share_dict_get("getMediaCategorySaleTopn:"..tostring(args["id"]))
+local v = common.share_dict_get("getAllChapterByMediaId:"..tostring(args["id"]))
 if v == nil then
 	common.read_http(args)
 	local common_tab = common.common_tab
 	v = common_tab["http_body"]
 	if v ~= nil then
-		common.share_dict_set("getMediaCategorySaleTopn:"..tostring(args["id"]), v, 600)
+		common.share_dict_set("getAllChapterByMediaId:"..tostring(args["id"]), v, 600)
 	end
 end
 ngx.say(v)

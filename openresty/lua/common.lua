@@ -38,6 +38,7 @@ local function read_http(args)
 			ngx.header[k] = v
 		end
 	end
+
 	--响应体
 	common_tab["http_body"] = resp.body
 	ngx.say(resp.body)
@@ -48,6 +49,7 @@ end
 
 --[[
 @params args data type is table
+@Deprecated product detail page url changed, example:http://e.dangdang.com/123456.html
 --]]
 local function check_params(args)
 	if type(args) == "table" then
@@ -163,14 +165,19 @@ local function sub_utf8_string(s, n)
 end
 
 -- share dict set
-local function share_dict_set(k, v)
+local function share_dict_set(k, v, expire)
 	if k == nil or v == nil or config == nil then
 		return false
 	end
 	if type(k) ~= "string" then
 		return false
 	end
-	config:set(k, v)
+	if expire ~= nil then 
+		config:set(k, v, expire)
+	else
+		config:set(k, v)
+	end	
+	
 end
 
 -- share dict get
@@ -181,7 +188,8 @@ local function share_dict_get(k)
 	if type(k) ~= "string" then
 		return false
 	end
-	return config:get(k)
+	local value, flags = config:get(k)
+	return value
 end
 
 
