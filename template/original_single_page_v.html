@@ -51,6 +51,8 @@
 					<li class="chubannav"><a href="http://e.dangdang.com/publish_index_page.html">出版</a></li>
 					<li class="yuanchuangnav"><a href="http://e.dangdang.com/original_index_page.html">网络文学</a></li>
 					<li><a target="_blank" href="http://t.dangdang.com/20140107_5pz1">手机看书</a></li>
+					<li class="want_to_recharge"><a href="http://e.dangdang.com/recharge_methord_page.html" target="_blank">我要充值</a></li>
+					<li class="writer_sys"><a href="http://dpp.dangdang.com" target="_blank">作者后台</a></li>
 				</ul>
 			</div>
 		</div>
@@ -61,12 +63,15 @@
 		<div class="center">
 			<!-- 面包屑开始 -->
 			<div class="navigation_module" id="crumb" dd_name="面包屑">
-				<a href="http://e.dangdang.com/index_page.html">当当读书</a>
+				<a href="http://e.dangdang.com/index_page.html">当当读书</a>				 
 				{%	local categoryIds = media_info.categoryIds
-					local split_result = common.lua_string_split(categoryIds, ",")
-					if split_result ~= nil then %}
-				<a href="http://e.dangdang.com/classification_list_page.html?category={{split_result[1]}}&dimension=dd_sale">{{media_info.categorys}}</a>
-				{% end %}
+				    local categorys = media_info.categorys
+					if categoryIds ~= nil and categorys ~= nil then				
+						local split_result = common.lua_string_split(categoryIds, ",")
+						if split_result ~= nil then %}
+				<a href="http://e.dangdang.com/classification_list_page.html?category={{split_result[1]}}&dimension=dd_sale">{{categorys}}</a>
+					{% end %}
+				{% end %}			
 				<a class="focus">{{media_info.title}}</a>
 			</div>
 			<!-- 面包屑结束 -->
@@ -75,7 +80,7 @@
 				<div class="left">
 					<div id="content">
 						<div class="content clearfix">
-							<div class="image"><img src="{{media_info.coverPic}}"></div>
+							<div class="image"><img src="{*media_info.coverPic*}"></div>
 							<div class="descript">
 								<div class="title">{{media_info.title}}</div>
 								<div class="stars">
@@ -273,12 +278,12 @@
 										end %}
 									<div class="ori_product_reccell_module">
 										<div class="bookcover">
-											<a href="{{link}}" target="_blank">
-												<img onerror="javascript:nofind(this,'img/book_def_74_105.png');" src="{{coverPic}}">
+											<a href="{*link*}" target="_blank">
+												<img onerror="javascript:nofind(this,'img/book_def_74_105.png');" src="{*coverPic*}">
 											</a>
 										</div>
 										<p class="title">
-											<a href="{{link}}" target="_blank" title="{{title}}">
+											<a href="{*link*}" target="_blank" title="{{title}}">
 												{{title}}
 											</a>
 										</p>
@@ -309,7 +314,7 @@
 									</div>
 									<div class="desc">
 										{% local link = "http://e.dangdang.com/bar_detail_page.html?barId="..article_model.data.barInfo.barId %}
-										<h1 class="title"><a href="{{link}}">{{article_model.data.barInfo.barDesc}}</a></h1>
+										<h1 class="title"><a href="{*link*}">{{article_model.data.barInfo.barName}}</a></h1>
 									</div>
 									<div class="fans clearfix">
 										<a class="bar_write_btn" href="javascript:;" memberstatus="{{article_model.data.barInfo.memberStatus}}" barid="{{article_model.data.barInfo.barId}}">加入书吧</a>
@@ -351,15 +356,15 @@
 												</div>
 												<div class="desc">
 													<div class="post_con">
-														<h1 class="title"><a href="{{link}}" target="_blank">{{v["title"]}}</a></h1>
+														<h1 class="title"><a href="{*link*}" target="_blank">{{v["title"]}}</a></h1>
 														<div class="content">
-															<div class="brief"> <a href="{{link}}" class="left" target="_blank">{{v["content"]}}</a></div>		
+															<div class="brief"> <a href="{*link*}" class="left" target="_blank">{{v["content"]}}</a></div>		
 														</div>
 														{% if v["imgList"] ~= nil and v["imgList"] ~= "" then %}
 															<ul class="pic_list clearfix">
 																{% for key, val in pairs(v["imgList"]) do 
 																	if (key < 3) then %}
-																		<li><a href="{{link}}" target="_blank"><img src="{{val}}" alt=""></a></li>												
+																		<li><a href="{*link*}" target="_blank"><img src="{{val}}" alt=""></a></li>												
 																	{% end
 																end %}
 															</ul>
@@ -370,7 +375,7 @@
 															<i class="icon icon_size_20"></i>
 															<em class="praise_num">{{v["praiseNum"]}}</em>
 														</a>
-														<a href="{{link}}" target="_blank" class="comment">
+														<a href="{*link*}" target="_blank" class="comment">
 															<i class="icon icon_size_20"></i>
 															<em>{{v["commentNum"]}}</em>
 														</a>
@@ -406,9 +411,9 @@
 												if mediaType == 1 then
 													link = "./"..mediaList["saleId"]..".html"
 												end	%}
-											<div class="bookcover"><a href="{{link}}" target="_blank"><img onerror = "javascript:nofind(this,\'img/book_def_74_105.png\');" src="{{coverPic}}" /></a></div>
+											<div class="bookcover"><a href="{*link*}" target="_blank"><img onerror = "javascript:nofind(this,\'img/book_def_74_105.png\');" src="{*coverPic*}" /></a></div>
 											<div class="bookinfo">
-												<div class="title"><a href="{{link}}" target="_blank"  title="{{mediaList["title"]}}">{{mediaList["title"]}}</a></div>
+												<div class="title"><a href="{*link*}" target="_blank"  title="{{mediaList["title"]}}">{{mediaList["title"]}}</a></div>
 												<div class="author">{{mediaList["authorPenname"]}}</div>
 												<div class="price">
 													{% local price = price_model.dealPrice1(v) %}
@@ -445,10 +450,10 @@
 									<div class="nopic">
 										<div class="mark">{{k}}</div>
 										<div class="book_content">
-											<div class="cover"><a href="{{link}}" target="_blank"><img src="{{coverPic}}" data-status="0" onerror="this.src='img/book_def_180_260.png'" alt=""></a></div>
+											<div class="cover"><a href="{*link*}" target="_blank"><img src="{*coverPic*}" data-status="0" onerror="this.src='img/book_def_180_260.png'" alt=""></a></div>
 											<div class="info">
-												<h3><a href="{{link}}" target="_blank">{{v["title"]}}</a></h3>
-												<span class="grey"><a href="{{link}}" target="_blank">{{v["authorPenname"]}}</a></span>
+												<h3><a href="{*link*}" target="_blank">{{v["title"]}}</a></h3>
+												<span class="grey"><a href="{*link*}" target="_blank">{{v["authorPenname"]}}</a></span>
 												<div class="price_inuse">
 												{% local price = price_model.dealPrice2(v) %}
 													<span class="orange">{{price}}</span>
@@ -495,7 +500,7 @@
 				<input id="mediaType" type="hidden" value="{{media_info.mediaType}}">
 				<input id="product_title" type="hidden" value="{{media_info.title}}" />
 				<input id="product_desc" type="hidden" value="{{descs}}" />
-				<input id="product_coverPic" type="hidden" value="{{media_info.coverPic}}" />
+				<input id="product_coverPic" type="hidden" value="{*media_info.coverPic*}" />
 			</div>
 			
 		</div>
