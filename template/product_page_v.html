@@ -205,7 +205,7 @@
 						{% end %}
 																					
 						<div class="btn_line">
-							{% local link = "http://e.dangdang.com/pc/reader/index.html?id="..media_info.mediaId %}
+							{% local link = "http://e.dangdang.com/ebook/read.do?productId="..media_info.mediaId %}
 							{% if media_info.freeBook == 1 then 
 								if media_info.isWholeAuthority == 1 then %}
 									<a href="{*link*}" class="btn_orange" status="readNow" target="_blank" id="readNow" dd_name="立即阅读">立即阅读</a>
@@ -227,7 +227,7 @@
 										<a href="javascript:;" class="btn_orange" status="buy" id="buy_now_button" deviceTypeCodes="{{deviceTypeCodes}}" dd_name="购买">购买</a>
 										<a href="##" class="shopping_car addShopCartBtn btn_basic" id="addShopCartBtn" dd_name="加入购物车">加入购物车</a>
 									{% else 
-										if ( borrowEndTime - (ngx.now * 1000)) > 0 then %}	
+										if ( borrowEndTime - (ngx.now() * 1000)) > 0 then %}	
 											<a href="{*link*}" class="btn_orange" status="readNow" target="_blank" id="readNowBtn" dd_name="立即阅读">立即阅读</a>
 										{% else %}
 											<a href="javascript:;" class="btn_orange" status="reborrow" id="reborrowBtn" dd_name="续借" >续借</a>
