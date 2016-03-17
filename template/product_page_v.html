@@ -213,8 +213,10 @@
 									<a href="javascript:;" class="btn_orange" status="free" id="freeGet" dd_name="免费获取">免费获取</a>
 								{% end %}
 							{% else 
-								local borrowEndTime = media_info.borrowEndTime
-								if media_info.canBorrow == 1 then
+								if media_info.isWholeAuthority == 1 then %}
+									<a href="{*link*}" class="btn_orange" status="readNow" target="_blank" id="readNowBtn" dd_name="立即阅读">立即阅读</a>									
+								{% elseif media_info.canBorrow == 1 then 
+									local borrowEndTime = media_info.borrowEndTime
 									local duration = media_info.borrowDuration
 									local durDay
 									if duration ~= nil then
@@ -234,16 +236,12 @@
 											<a href="javascript:;" class="btn_orange" status="buy" id="buy_now_button" deviceTypeCodes="{{deviceTypeCodes}}" dd_name="购买">购买</a>
 											<a href="##" class="shopping_car addShopCartBtn btn_basic" id="addShopCartBtn" dd_name="加入购物车">加入购物车</a>
 										{% end %}							
-									{% end %}								
-								{% else
-									if media_info.isWholeAuthority == 1 then %}
-										<a href="{*link*}" class="btn_orange" status="readNow" target="_blank" id="readNowBtn" dd_name="立即阅读">立即阅读</a>									
-									{% else %}
-										<a href="{*link*}" class="btn_orange" status="try" target="_blank" id="tryBtn" dd_name="试读">试读</a>
-										<a href="javascript:;" class="btn_orange" status="buy" id="buy_now_button" deviceTypeCodes="{{deviceTypeCodes}}" dd_name="购买">购买</a>
-										<a href="##" class="shopping_car addShopCartBtn btn_basic" id="addShopCartBtn" dd_name="加入购物车">加入购物车</a>
-									{% end %}			
-								{% end %}									
+									{% end %}									
+								{% else %}
+									<a href="{*link*}" class="btn_orange" status="try" target="_blank" id="tryBtn" dd_name="试读">试读</a>
+									<a href="javascript:;" class="btn_orange" status="buy" id="buy_now_button" deviceTypeCodes="{{deviceTypeCodes}}" dd_name="购买">购买</a>
+									<a href="##" class="shopping_car addShopCartBtn btn_basic" id="addShopCartBtn" dd_name="加入购物车">加入购物车</a>							
+								{% end %}														
 							{% end %}
 							<span class="collectSpan clearfix" id="collectC" data-isStore="{{media_info.isStore}}"" dd_name="收藏">
 								<div class="collection" data-isstore="{{media_info.isStore}}">
