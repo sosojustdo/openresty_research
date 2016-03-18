@@ -127,8 +127,14 @@
 									end
 								else
 									if media_info.mediaType == 2 then
-										bellStr = price
-										priceStr = "¥"..string.format("%.2f", (price/100))
+										if media_info.promotionPrice ~= nil then
+											bellStr = tonumber(media_info.promotionPrice)*100
+											priceStr = "¥"..string.format("%.2f", media_info.promotionPrice)
+											price = tonumber(media_info.promotionPrice)*100
+										else
+											bellStr = price
+											priceStr = "¥"..string.format("%.2f", (price/100))
+										end																			
 										if paperMediaPrice ~= nil then
 											paperpriceStr = "¥"..string.format("%.2f",paperMediaPrice)
 											local discountNum = string.format("%.1f", (price/(paperMediaPrice*100))*10)

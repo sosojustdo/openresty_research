@@ -5,10 +5,7 @@ local ngx_log = ngx.log
 local ngx_ERR = ngx.ERR
 local model_tab = {}
 
---request params
-local args = ngx.req.get_uri_args()
-
---close template cache
+--template cache
 template.caching(true)
 
 --login token
@@ -65,7 +62,98 @@ local media = model_tab["media_model"].data.mediaSale.mediaList[1]
 local media_type = media["mediaType"]
 local media_id = media["mediaId"]
 
-if media_type == 1 then --original_single_page.html
+--getMediaCategorySaleTopn http interface params table
+local getMediaCategorySaleTopnTable = {action="getMediaCategorySaleTopn",
+	num = "4",
+	deviceSerialNo = "html5",
+	macAddr = "html5",
+	channelType = "html5",
+	clientVersionNo = "5.0.0",
+	platformSource = "DDDS-P",
+	fromPlatform = "106",
+	deviceType = "pconline",
+	mediaType = media_type,
+	mediaId = media_id,
+	id = saleId
+}
+if token then
+	getMediaCategorySaleTopnTable["token"] = token
+end
+
+--getBuyAlsoBuy http interface params table
+local getBuyAlsoBuyTable = {action="getBuyAlsoBuy",
+	start = "0",
+	needPrice = "1",
+	deviceSerialNo = "html5",
+	macAddr = "html5",
+	channelType = "html5",
+	clientVersionNo = "5.0.0",
+	platformSource = "DDDS-P",
+	fromPlatform = "106",
+	deviceType = "pconline",
+	mediaId = media_id,
+	id = saleId
+}
+getBuyAlsoBuyTable["end"] = "5"
+if token then
+	getBuyAlsoBuyTable["token"] = token
+end
+
+--queryArticleListV2 http interface params table
+local queryArticleListV2Table = {action="queryArticleListV2",
+	deviceSerialNo = "html5",
+	macAddr = "html5",
+	channelType = "html5",
+	clientVersionNo = "5.0.0",
+	platformSource = "DDDS-P",
+	fromPlatform = "106",
+	deviceType = "pconline",
+	objectId = media_id
+}
+if token then
+	queryArticleListV2Table["token"] = token
+end
+
+--getViewAlsoView http interface params table
+local getViewAlsoViewTable = {action="getViewAlsoView",
+	start = "0",
+	needPrice = "1",
+	deviceSerialNo = "html5",
+	macAddr = "html5",
+	channelType = "html5",
+	clientVersionNo = "5.0.0",
+	platformSource = "DDDS-P",
+	fromPlatform = "106",
+	deviceType = "pconline",
+	mediaId = media_id,
+	id = saleId
+}
+getViewAlsoViewTable["end"] = "7"
+if token then
+	getViewAlsoViewTable["token"] = token
+end
+
+--hotChannel http interface params table
+local hotChannelTable = {action="hotChannel",
+	start = "0",
+	deviceSerialNo = "html5",
+	macAddr = "html5",
+	channelType = "html5",
+	clientVersionNo = "5.0.0",
+	platformSource = "DDDS-P",
+	fromPlatform = "106",
+	deviceType = "pconline",
+	isRandom = "1",
+	mediaId = media_id,
+	id = saleId
+}
+hotChannelTable["end"] = "1"
+if token then
+	hotChannelTable["token"] = token
+end
+
+--original_single_page.html
+if media_type == 1 then 
 	--getMediaRewardRecord http interface params table
 	local getMediaRewardRecordTable = {action="getMediaRewardRecord",
 		count = "7",
@@ -83,26 +171,6 @@ if media_type == 1 then --original_single_page.html
 		getMediaRewardRecordTable["token"] = token
 	end
 
-
-	--getMediaCategorySaleTopn http interface params table
-	local getMediaCategorySaleTopnTable = {action="getMediaCategorySaleTopn",
-		num = "4",
-		deviceSerialNo = "html5",
-		macAddr = "html5",
-		channelType = "html5",
-		clientVersionNo = "5.0.0",
-		platformSource = "DDDS-P",
-		fromPlatform = "106",
-		deviceType = "pconline",
-		mediaType = media_type,
-		mediaId = media_id,
-		id = saleId
-	}
-	if token then
-		getMediaCategorySaleTopnTable["token"] = token
-	end
-
-
 	--getMediasByAuthorExceptThis http interface params table
 	local getMediasByAuthorExceptThisTable = {action="getMediasByAuthorExceptThis",
 		deviceSerialNo = "html5",
@@ -118,43 +186,7 @@ if media_type == 1 then --original_single_page.html
 	if token then
 		getMediasByAuthorExceptThisTable["token"] = token
 	end
-
-
-	--getBuyAlsoBuy http interface params table
-	local getBuyAlsoBuyTable = {action="getBuyAlsoBuy",
-		start = "0",
-		needPrice = "1",
-		deviceSerialNo = "html5",
-		macAddr = "html5",
-		channelType = "html5",
-		clientVersionNo = "5.0.0",
-		platformSource = "DDDS-P",
-		fromPlatform = "106",
-		deviceType = "pconline",
-		mediaId = media_id,
-		id = saleId
-	}
-	getBuyAlsoBuyTable["end"] = "5"
-	if token then
-		getBuyAlsoBuyTable["token"] = token
-	end
-
-
-	--queryArticleListV2 http interface params table
-	local queryArticleListV2Table = {action="queryArticleListV2",
-		deviceSerialNo = "html5",
-		macAddr = "html5",
-		channelType = "html5",
-		clientVersionNo = "5.0.0",
-		platformSource = "DDDS-P",
-		fromPlatform = "106",
-		deviceType = "pconline",
-		objectId = media_id
-	}
-	if token then
-		queryArticleListV2Table["token"] = token
-	end
-	
+		
 	--getAllChapterByMediaId http interface params table
 	local getAllChapterByMediaIdTable = {action="getAllChapterByMediaId",
 		deviceSerialNo = "html5",
@@ -171,45 +203,6 @@ if media_type == 1 then --original_single_page.html
 		getAllChapterByMediaIdTable["token"] = token
 	end
 	
-	--getViewAlsoView http interface params table
-	local getViewAlsoViewTable = {action="getViewAlsoView",
-		start = "0",
-		needPrice = "1",
-		deviceSerialNo = "html5",
-		macAddr = "html5",
-		channelType = "html5",
-		clientVersionNo = "5.0.0",
-		platformSource = "DDDS-P",
-		fromPlatform = "106",
-		deviceType = "pconline",
-		mediaId = media_id,
-		id = saleId
-	}
-	getViewAlsoViewTable["end"] = "7"
-	if token then
-		getViewAlsoViewTable["token"] = token
-	end
-
-
-	--hotChannel http interface params table
-	local hotChannelTable = {action="hotChannel",
-		start = "0",
-		deviceSerialNo = "html5",
-		macAddr = "html5",
-		channelType = "html5",
-		clientVersionNo = "5.0.0",
-		platformSource = "DDDS-P",
-		fromPlatform = "106",
-		deviceType = "pconline",
-		isRandom = "1",
-		mediaId = media_id,
-		id = saleId
-	}
-	hotChannelTable["end"] = "1"
-	if token then
-		hotChannelTable["token"] = token
-	end
-
 local res2, res3, res4, res5, res6, res7, res8, res9 = ngx.location.capture_multi{
 	{ "/getMediaRewardRecord", {args = getMediaRewardRecordTable} },
 	{ "/getMediasByAuthorExceptThis", {args = getMediasByAuthorExceptThisTable} },
@@ -343,109 +336,15 @@ end
 local function render_original_single_page()
 	return template.render("original_single_page_v.html", model_tab)
 end
+
 local ok, err = pcall(render_original_single_page)
-	if not ok then
-		ngx_log(ngx_ERR, "original_single_page_v.html render error:"..err)
-		return ngx.redirect("/error_page.html")
-	end
-
-
-elseif media_type == 2 then --product_page.html
-
---getMediaCategorySaleTopn http interface params table
-local getMediaCategorySaleTopnTable = {action="getMediaCategorySaleTopn",
-	num = "4",
-	deviceSerialNo = "html5",
-	macAddr = "html5",
-	channelType = "html5",
-	clientVersionNo = "5.0.0",
-	platformSource = "DDDS-P",
-	fromPlatform = "106",
-	deviceType = "pconline",
-	mediaType = media_type,
-	mediaId = media_id,
-	id = saleId
-}
-if token then
-	getMediaCategorySaleTopnTable["token"] = token
+if not ok then
+	ngx_log(ngx_ERR, "original_single_page_v.html render error:"..err)
+	return ngx.redirect("/error_page.html")
 end
 
-
---getViewAlsoView http interface params table
-local getViewAlsoViewTable = {action="getViewAlsoView",
-	start = "0",
-	needPrice = "1",
-	deviceSerialNo = "html5",
-	macAddr = "html5",
-	channelType = "html5",
-	clientVersionNo = "5.0.0",
-	platformSource = "DDDS-P",
-	fromPlatform = "106",
-	deviceType = "pconline",
-	mediaId = media_id,
-	id = saleId
-}
-getViewAlsoViewTable["end"] = "7"
-if token then
-	getViewAlsoViewTable["token"] = token
-end
-
-
---hotChannel http interface params table
-local hotChannelTable = {action="hotChannel",
-	start = "0",
-	deviceSerialNo = "html5",
-	macAddr = "html5",
-	channelType = "html5",
-	clientVersionNo = "5.0.0",
-	platformSource = "DDDS-P",
-	fromPlatform = "106",
-	deviceType = "pconline",
-	isRandom = "1",
-	mediaId = media_id,
-	id = saleId
-}
-hotChannelTable["end"] = "1"
-if token then
-	hotChannelTable["token"] = token
-end
-
-
---getBuyAlsoBuy http interface params table
-local getBuyAlsoBuyTable = {action="getBuyAlsoBuy",
-	start = "0",
-	needPrice = "1",
-	deviceSerialNo = "html5",
-	macAddr = "html5",
-	channelType = "html5",
-	clientVersionNo = "5.0.0",
-	platformSource = "DDDS-P",
-	fromPlatform = "106",
-	deviceType = "pconline",
-	mediaId = media_id,
-	id = saleId
-}
-getBuyAlsoBuyTable["end"] = "5"
-if token then
-	getBuyAlsoBuyTable["token"] = token
-end
-
-
---queryArticleListV2 http interface params table
-local queryArticleListV2Table = {action="queryArticleListV2",
-	deviceSerialNo = "html5",
-	macAddr = "html5",
-	channelType = "html5",
-	clientVersionNo = "5.0.0",
-	platformSource = "DDDS-P",
-	fromPlatform = "106",
-	deviceType = "pconline",
-	objectId = media_id
-}
-if token then
-	queryArticleListV2Table["token"] = token
-end
-
+--product_page.html
+elseif media_type == 2 then 
 
 --getPublishedContents http interface params table
 local getPublishedContentsTable = {action="getPublishedContents",
@@ -565,17 +464,15 @@ else
 end
 
 --render product_page_.html
-
 local function render_product()
 	return template.render("product_page_v.html", model_tab)
 end
 	
-
 local ok, err = pcall(render_product)
-	if not ok then
-		ngx_log(ngx_ERR, "product_page_v.html render error:"..err)
-		return ngx.redirect("/error_page.html")
-	end
+if not ok then
+	ngx_log(ngx_ERR, "product_page_v.html render error:"..err)
+	return ngx.redirect("/error_page.html")
+end
 
 end
 

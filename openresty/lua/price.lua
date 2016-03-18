@@ -15,13 +15,17 @@ local function dealPrice1(obj)
 			priceStr = "免费"
 		else
 			if item_detail["mediaType"] == 2 then
-				if item_detail["price"] == nil then
-					priceStr = ""
-				elseif item_detail["price"] == 0 then
-					priceStr = "免费"
+				if item_detail["promotionPrice"] ~= nil then 					
+					priceStr = "￥"..string.format("%.2f", item_detail["promotionPrice"])
 				else
-					priceStr = "￥"..string.format("%.2f", item_detail["price"]/100)
-				end
+					if item_detail["price"] == nil then
+						priceStr = ""
+					elseif item_detail["price"] == 0 then
+						priceStr = "免费"
+					else
+						priceStr = "￥"..string.format("%.2f", item_detail["price"]/100)
+					end
+				end				
 			elseif item_detail["mediaType"] == 1 then
 				if obj["isSupportFullBuy"] == 1 then
 					if item_detail["price"] == nil then
@@ -41,11 +45,15 @@ local function dealPrice1(obj)
 					end
 				end
 			elseif item_detail["mediaType"] == 3 then
-				if item_detail["lowestPrice"] == 0 then
-					priceStr = "免费"
+				if item_detail["lowestPrice"] ~= nil then
+					if item_detail["lowestPrice"] == 0 then
+						priceStr = "免费"
+					else
+						priceStr = "￥"..string.format("%.2f", (item_detail["lowestPrice"]*100)/100)
+					end
 				else
-					priceStr = "￥"..string.format("%.2f", (item_detail["lowestPrice"]*100)/100)
-				end
+					priceStr = "免费"
+				end	
 			end
 		end
 	end
@@ -63,13 +71,17 @@ local function dealPrice2(obj)
 			priceStr = "免费"
 		else
 			if obj["mediaType"] == 2 then
-				if obj["price"] == nil then
-					priceStr = ""
-				elseif obj["price"] == 0 then
-					priceStr = "免费"
+				if obj["promotionPrice"] ~= nil then 
+					priceStr = "￥"..string.format("%.2f", obj["promotionPrice"])
 				else
-					priceStr = "￥"..string.format("%.2f", obj["price"]/100)
-				end
+					if obj["price"] == nil then
+						priceStr = ""
+					elseif obj["price"] == 0 then
+						priceStr = "免费"
+					else
+						priceStr = "￥"..string.format("%.2f", obj["price"]/100)
+					end
+				end								
 			elseif obj["mediaType"] == 1 then
 				if obj["isSupportFullBuy"] == 1 then
 					if obj["price"] == nil then
@@ -89,11 +101,15 @@ local function dealPrice2(obj)
 					end
 				end
 			elseif obj["mediaType"] == 3 then
-				if obj["lowestPrice"] == 0 then
-					priceStr = "免费"
+				if obj["lowestPrice"] ~= nil then 
+					if obj["lowestPrice"] == 0 then
+						priceStr = "免费"
+					else
+						priceStr = "￥"..string.format("%.2f", (obj["lowestPrice"]*100)/100)
+					end
 				else
-					priceStr = "￥"..string.format("%.2f", (obj["lowestPrice"]*100)/100)
-				end
+					priceStr = "免费"
+				end				
 			end
 		end
 	end
