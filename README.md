@@ -4,12 +4,17 @@ openresty research
 一：Install
 1:wget https://openresty.org/download/ngx_openresty-1.9.7.1.tar.gz</br>
 2:
-./configure --prefix=/usr/local/openresty \
-            --with-pcre-jit \
-            --with-ipv6 \
-	    --with-luajit \
-            --without-http_redis2_module \
-            --with-http_iconv_module
+./configure --prefix=/Users/daipeng/develop/openresty \
+--with-http_ssl_module \
+--with-openssl=/Users/daipeng/develop/openssl-1.0.1u \
+--with-pcre-jit \
+--with-ipv6 \
+--with-luajit \
+--with-http_iconv_module \
+--with-stream \
+--with-stream_ssl_module \
+--with-threads \
+--add-module=/Users/daipeng/develop/stream-lua-nginx-module
 	    
 
 3:gmake gmake install</br>
