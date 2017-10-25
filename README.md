@@ -4,12 +4,13 @@ openresty research
 一：Install
 1:wget https://openresty.org/download/ngx_openresty-1.9.7.1.tar.gz</br>
 2:
-./configure --prefix=/usr/local/openresty \</br>
-            --with-pcre-jit \</br>
-            --with-ipv6 \</br>
-			--with-luajit \</br>
-            --without-http_redis2_module \</br>
-            --with-http_iconv_module</br>
+./configure --prefix=/usr/local/openresty \
+            --with-pcre-jit \
+            --with-ipv6 \
+	    --with-luajit \
+            --without-http_redis2_module \
+            --with-http_iconv_module
+	    
 
 3:gmake gmake install</br>
 4:vim /etc/profile  </br>
